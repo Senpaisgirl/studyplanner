@@ -14,3 +14,4 @@ pnpm-debug.log*
 
 src/projekt-export.md
 scripts/export-code-to-md.js
+projekt-export.md
