@@ -1,5 +1,6 @@
 export const initialPlannerState = {
   tasks: [],
+  dailyTasks: [],
   events: [],
   updatedAt: null,
 };
@@ -15,4 +16,7 @@ export const plannerActionTypes = {
   GO_TO_PREVIOUS_WEEK: "GO_TO_PREVIOUS_WEEK",
   GO_TO_CURRENT_WEEK: "GO_TO_CURRENT_WEEK",
   GO_TO_NEXT_WEEK: "GO_TO_NEXT_WEEK",
+  ADD_DAILY_TASK: "ADD_DAILY_TASK",
+  TOGGLE_DAILY_TASK_DONE: "TOGGLE_DAILY_TASK_DONE",
+  REMOVE_DAILY_TASKS: "REMOVE_DAILY_TASKS",
 };

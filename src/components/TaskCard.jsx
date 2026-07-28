@@ -2,7 +2,7 @@ import { formatDueDate, getDueState } from '../utils/date'
 import { SUBJECT_COLORS } from '../data/subjectColors';
 import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon } from './Icons';
 
-export default function TaskCard({ task, onDone, onBacklog, onMoveToWeek, compact = false }) {
+export default function TaskCard({ task, onDone, onBacklog, onMoveToWeek, compact = false, hidenWeekAction = false, hideBacklogAction = false }) {
   const dueState = getDueState(task.due);
   const isUrgent = dueState === 'overdue'
   

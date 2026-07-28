@@ -15,7 +15,12 @@ export default function Sidebar({
   backlog,
   toggleDone,
   sendTaskToBacklog,
+  dailyTasks,
+  toggleDone,
+  sendTaskToBacklog,
   moveTaskToWeek,
+  toggleDailyTaskDone,
+  removeDailyTask,
 }) {
     return (
         <aside className="sidebar">
@@ -37,8 +42,9 @@ export default function Sidebar({
                 <button
                     type="button"
                     className={sidebarMode === 'task' ? 'mode-btn active' : 'mode-btn'}
-                    onClick={() => setSidebarMode('task')}
+                    onClick={() => toggleSidebarMode('task')}
                     aria-label="New Task"
+                    aria-pressed={sidebarMode === "task"}
                     title="New Task"
                 >
                     <TaskTabIcon />
@@ -47,29 +53,57 @@ export default function Sidebar({
                 <button
                     type="button"
                     className={sidebarMode === 'event' ? 'mode-btn active' : 'mode-btn'}
-                    onClick={() => setSidebarMode('event')}
+                    onClick={() => toggleSidebarMode('event')}
+                    aria-pressed={sidebarMode === "event"}
                     aria-label="New Event"
                     title="New Event"
                 >
                     <EventTabIcon />
                 </button>
 
+                <button
+                    type="button"
+                    className={sidebarMode === "daily" ? "mode-btn active" : "mode-btn"}
+                    onClick={() => toggleSidebarMode("daily")}
+                    aria-pressed={sidebarMode === "daily"}
+                    aria-label="New Daily Task"
+                    title="New Daily Task"
+                >
+                    <RepeatIcon />
+                </button>
+
                 </div>
             </section>
 
-            {sidebarMode === 'task' ? (
+            {sidebarMode === 'task' && (
                 <TaskForm
                     taskForm={taskForm}
                     setTaskForm={setTaskForm}
                     addTask={addTask}
                 />
-            ) : (
+            )}
+
+            {sidebarMode === 'event' && (
                 <EventForm
                     eventForm={eventForm}
                     setEventForm={setEventForm}
                     addEvent={addEvent}
                 />
             )}
+
+            {sidebarMode === 'daily' && (
+                <DailyTaskForm
+                    dailyTaskForm={dailyTaskForm}
+                    setDailyTaskForm={setDailyTaskForm}
+                    addDailyTask={addDailyTask}
+                />
+            )}
+
+            <DailyTasksPanel
+                dailyTasks={dailyTasks}
+                toggleDailyTaskDone={toggleDailyTaskDone}
+                removeDailyTask={removeDailyTask}
+            />
 
             <BacklogPanel
                 backlog={backlog}
@@ -79,4 +113,8 @@ export default function Sidebar({
             />
         </aside>
     );
+}
+
+function toggleSidebarMode(mode) {
+    setSidebarMode((prev) => (prev === mode ? null : mode));
 }

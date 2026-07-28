@@ -26,7 +26,7 @@ export function usePlannerStore() {
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
   );
 
-  const [sidebarMode, setSidebarMode] = useState("task");
+  const [sidebarMode, setSidebarMode] = useState("null");
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
