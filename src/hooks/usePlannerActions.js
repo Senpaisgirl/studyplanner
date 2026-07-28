@@ -70,7 +70,7 @@ export function usePlannerActions({
       addEventAction({
         id: crypto.randomUUID(),
         title: eventForm.title.trim(),
-        categoryId: eventForm.categoryId,
+        categoryId: eventForm.categoryId ?? eventForm.category ?? "other",
         date: eventForm.date,
         startTime: eventForm.startTime,
         endTime: eventForm.endTime,
