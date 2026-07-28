@@ -20,7 +20,7 @@ export function usePlannerStore() {
 
   const [eventForm, setEventForm] = useState({
     title: "",
-    category: eventFormDefaultCategory,
+    categoryId: eventFormDefaultCategory,
     date: "",
     startTime: "10:00",
     endTime: "11:00",
@@ -86,7 +86,6 @@ export function usePlannerStore() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    console.log("DATA BEFORE SAVE", data);
     plannerRepository.save(data);
   }, [data, isHydrated]);
 

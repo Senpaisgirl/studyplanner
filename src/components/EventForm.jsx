@@ -1,4 +1,9 @@
-export default function EventForm({ eventForm, setEventForm, addEvent, eventCategories }) {
+export default function EventForm({
+  eventForm,
+  setEventForm,
+  addEvent,
+  eventCategories = [],
+}) {
   return (
     <section className="panel">
       <h2>Create Event</h2>
@@ -13,19 +18,44 @@ export default function EventForm({ eventForm, setEventForm, addEvent, eventCate
         />
 
         <select
-          value={eventForm.category}
+          value={eventForm.categoryId}
           onChange={(e) =>
-            setEventForm({ ...eventForm, category: e.target.value })
+            setEventForm({ ...eventForm, categoryId: e.target.value })
           }
         >
           {eventCategories.map((category) => (
-            <option key={category.id} value={category.label}>
+            <option key={category.id} value={category.id}>
               {category.label}
             </option>
           ))}
         </select>
 
-        ...
+        <input
+          type="date"
+          value={eventForm.date}
+          onChange={(e) =>
+            setEventForm({ ...eventForm, date: e.target.value })
+          }
+        />
+
+        <div className="form-row">
+          <input
+            type="time"
+            value={eventForm.startTime}
+            onChange={(e) =>
+              setEventForm({ ...eventForm, startTime: e.target.value })
+            }
+          />
+          <input
+            type="time"
+            value={eventForm.endTime}
+            onChange={(e) =>
+              setEventForm({ ...eventForm, endTime: e.target.value })
+            }
+          />
+        </div>
+
+        <button type="submit">Save</button>
       </form>
     </section>
   );

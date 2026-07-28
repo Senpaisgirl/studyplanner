@@ -58,9 +58,6 @@ export default function SettingsModal({ onClose, updateUserSettings, userSetting
   }
 
   function save() {
-    console.log("SAVE CLICKED");
-    console.log("categories before save", categories);
-
     updateUserSettings({
       theme: themeValue,
       categories,

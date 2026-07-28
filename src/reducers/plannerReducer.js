@@ -174,7 +174,6 @@ export function plannerReducer(state, action) {
     }
     
     case plannerActionTypes.UPDATE_USER_SETTINGS:
-      console.log("REDUCER UPDATE_USER_SETTINGS", action.payload);
       return updatePlannerState(state, {
         userSettings: {
           ...(state.userSettings ?? {}),
