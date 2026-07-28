@@ -5,11 +5,13 @@ export default function DailyTasksPanel({
   toggleDailyTaskDone,
   removeDailyTask,
 }) {
+  const doneDailyCount = dailyTasks.filter((t) => t.status === "done").length;
+
   return (
     <section className="panel backlog-panel">
       <div className="panel-head">
         <h2>Daily Tasks</h2>
-        <strong>{dailyTasks.length}</strong>
+        <strong>{doneDailyCount}{dailyTasks.length}</strong>
       </div>
 
       <div className="task-list compact">
