@@ -19,13 +19,15 @@ export default function WeekBoard({
   removeEvent,
   removeTask,
 }) {
+  const doneWeekTasksCount = weekTasks.filter((task) => task.status === "done").length;
+
   return (
     <section className="board-grid">
       <section className="board-main">
         <section className="panel">
           <div className="panel-head">
             <h2>This Week</h2>
-            <strong>{weekTasks.length}</strong>
+            <strong>{doneWeekTasksCount}/{weekTasks.length}</strong>
           </div>
 
           <DroppableTaskList

@@ -9,11 +9,13 @@ export default function BacklogPanel({
   moveTaskToWeek,
   removeTask,
 }) {
+   const doneBacklogCount = backlog.filter((task) => task.status === "done").length;
+
   return (
     <section className="panel backlog-panel">
       <div className="panel-head">
         <h2>Backlog</h2>
-        <strong>{backlog.length}</strong>
+        <strong>{doneBacklogCount}/{backlog.length}</strong>
       </div>
 
       <DroppableTaskList

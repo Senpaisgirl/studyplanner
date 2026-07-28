@@ -7,6 +7,7 @@ export default function TaskCard({
   onDone,
   onBacklog,
   onMoveToWeek,
+  onDelete,
   compact = false,
   hideWeekAction = false,
   hideBacklogAction = false,

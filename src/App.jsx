@@ -103,10 +103,8 @@ function App() {
         <main className="main">
           <Topbar
             weekLabel={planner.weekLabel}
-            totalWeekTasksCount={planner.totalWeekTasksCount}
+            plannedWeekTasksCount={planner.plannedWeekTasksCount}
             doneWeekTasksCount={planner.doneWeekTasksCount}
-            totalDailyTasksCount={planner.totalDailyTasksCount}
-            doneDailyTasksCount={planner.doneDailyTasksCount}
             weekEventsCount={planner.weekEventsCount}
             goToPreviousWeek={planner.goToPreviousWeek}
             goToCurrentWeek={planner.goToCurrentWeek}
