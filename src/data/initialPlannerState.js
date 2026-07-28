@@ -1,0 +1,18 @@
+export const initialPlannerState = {
+  tasks: [],
+  events: [],
+  updatedAt: null,
+};
+
+export const plannerActionTypes = {
+  HYDRATE_PLANNER: "HYDRATE_PLANNER",
+  ADD_TASK: "ADD_TASK",
+  ADD_EVENT: "ADD_EVENT",
+  REMOVE_EVENT: "REMOVE_EVENT",
+  TOGGLE_TASK_DONE: "TOGGLE_TASK_DONE",
+  MOVE_TASK_TO_WEEK: "MOVE_TASK_TO_WEEK",
+  MOVE_TASK_TO_BACKLOG: "MOVE_TASK_TO_BACKLOG",
+  GO_TO_PREVIOUS_WEEK: "GO_TO_PREVIOUS_WEEK",
+  GO_TO_CURRENT_WEEK: "GO_TO_CURRENT_WEEK",
+  GO_TO_NEXT_WEEK: "GO_TO_NEXT_WEEK",
+};

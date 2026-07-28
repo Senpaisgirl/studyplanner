@@ -1,0 +1,45 @@
+import SortableTaskCard from "./SortableTaskCard";
+import DroppableTaskList from "./DroppableTaskList";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+
+export default function BacklogPanel({
+  backlog,
+  toggleDone,
+  sendTaskToBacklog,
+  moveTaskToWeek,
+}) {
+  return (
+    <section className="panel backlog-panel">
+      <div className="panel-head">
+        <h2>Backlog</h2>
+        <strong>{backlog.length}</strong>
+      </div>
+
+      <DroppableTaskList
+        id="backlog"
+        className="task-list compact droppable-task-list"
+        isEmpty={backlog.length === 0}
+      >
+        <SortableContext
+          items={backlog.map((task) => task.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {backlog.length === 0 ? (
+            <p className="empty-copy">No backlogged tasks.</p>
+          ) : (
+            backlog.map((task) => (
+              <SortableTaskCard
+                key={task.id}
+                task={task}
+                onDone={toggleDone}
+                onBacklog={sendTaskToBacklog}
+                onMoveToWeek={moveTaskToWeek}
+                compact
+              />
+            ))
+          )}
+        </SortableContext>
+      </DroppableTaskList>
+    </section>
+  );
+}

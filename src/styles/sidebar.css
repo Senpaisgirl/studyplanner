@@ -1,0 +1,70 @@
+.sidebar {
+  overflow-y: auto;
+  padding: var(--space-6);
+  border-right: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-5);
+}
+
+.brand h1, .topbar h2, .panel h2 { margin: 0; }
+.brand p, .panel p, .task-card p { margin: 0; color: var(--color-text-muted); }
+.brand-mark { width: 48px; color: var(--color-primary); }
+.brand h1 { font-size: 1.7rem }
+
+.sidebar-new {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.mode-switch {
+  display: flex;
+  gap: var(--space-3);
+}
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  flex: 1;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border));
+}
+.mode-btn:hover {
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-primary-soft));
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+}
+.mode-btn.active,
+.mode-btn.is-active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+.mode-btn.active:hover,
+.mode-btn.is-active:hover {
+  background: color-mix(in srgb, var(--color-primary) 88%, black 12%);
+  border-color: color-mix(in srgb, var(--color-primary) 88%, black 12%);
+}
+.mode-btn svg {
+  width: 1rem;
+  height: 1rem;
+  color: currentColor;
+}
+.mode-btn.active svg {
+  color: currentColor;
+}

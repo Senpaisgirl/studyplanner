@@ -1,0 +1,29 @@
+.board-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.65fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.board-grid .panel {
+  margin-bottom: 0;
+}
+
+.board-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4)
+}
+
+.task-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.board-main .task-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.backlog-panel .task-list {
+  grid-template-columns: 1fr;
+}

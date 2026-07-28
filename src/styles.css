@@ -1,0 +1,169 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+
+:root, [data-theme='light'] {
+  --font-body: 'Satoshi', Inter, sans-serif;
+  --text-xs: 0.78rem;
+  --text-sm: 0.92rem;
+  --text-base: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: 1.6rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.8rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --color-bg: #f7f6f2;
+  --color-surface: #fbfbf8;
+  --color-surface-2: #f0e9f0;
+  --color-border: rgba(39, 29, 40, 0.12);
+  --color-text: #281d28;
+  --color-text-muted: #706771;
+  --color-primary: #ff94c2;
+  --color-primary-soft: #ffe8ee;
+  --color-success: #8fcf67;
+  --color-warning: #e8af34;
+  --color-danger: #dd6974;
+  --shadow-sm: 0 1px 2px rgba(30, 26, 20, 0.06);
+  --shadow-md: 0 8px 18px rgba(30, 26, 20, 0.08);
+  --transition-interactive: 180ms ease;
+}
+
+[data-theme='dark'] {
+  --color-bg: #171417;
+  --color-surface: #1d1a1d;
+  --color-surface-2: #262226;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text: #ecdfeb;
+  --color-text-muted: #a593a3;
+  --color-primary: #a04fa3;
+  --color-primary-soft: #38243a;
+  --color-success: #8fcf67;
+  --color-warning: #e8af34;
+  --color-danger: #dd6974;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button, input, select { font: inherit; }
+
+button {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border));
+  border-radius: var(--radius-md);
+  padding: 0.72rem 0.95rem;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  transition:
+    background var(--transition-interactive),
+    color var(--transition-interactive),
+    border-color var(--transition-interactive),
+    transform var(--transition-interactive),
+    box-shadow var(--transition-interactive);
+}
+
+button:hover {
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-primary-soft));
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button svg {
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+}
+
+button.active,
+button.is-active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+button.active:hover,
+button.is-active:hover {
+  background: color-mix(in srgb, var(--color-primary) 88%, black 12%);
+  border-color: color-mix(in srgb, var(--color-primary) 88%, black 12%);
+}
+
+input, select {
+  width: 100%;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 0.9rem;
+}
+
+.app-shell {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+}
+
+.main {
+  overflow-y: auto;
+  padding: var(--space-6);
+}
+
+.brand, .panel, .topbar, .stat-card, .day-column {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.panel {
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.ghost-btn {
+  background: var(--color-primary-soft);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border));
+  color: var(--color-primary);
+}
+
+.ghost-btn:hover {
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-primary-soft));
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+}
+
+.panel-head, .form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+@media (max-width: 1100px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .board-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .main, .sidebar { padding: var(--space-4); }
+  .topbar { flex-direction: column; align-items: stretch; }
+  .stats { grid-template-columns: 1fr 1fr 1fr; }
+  .board-main .task-list { grid-template-columns: 1fr; }
+}

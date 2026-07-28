@@ -1,0 +1,179 @@
+.task-card.subject-numa {
+  background: color-mix(in srgb, #fdbeff 8%, var(--color-surface));
+  border-color: color-mix(in srgb, #e8a7ea 26%, var(--color-border));
+}
+
+.task-card.subject-ds {
+  background: color-mix(in srgb, #c8abff 10%, var(--color-surface));
+  border-color: color-mix(in srgb, #b79af0 28%, var(--color-border));
+}
+
+.task-card.subject-se2 {
+  background: color-mix(in srgb, #97c0ff 11%, var(--color-surface));
+  border-color: color-mix(in srgb, #88b2ef 30%, var(--color-border));
+}
+
+.task-card.subject-mmt {
+  background: color-mix(in srgb, #99ffaa 12%, var(--color-surface));
+  border-color: color-mix(in srgb, #8fd89b 28%, var(--color-border));
+}
+
+.task-card.subject-other {
+  background: color-mix(in srgb, #ffda96 10%, var(--color-surface));
+  border-color: color-mix(in srgb, #e6c27f 30%, var(--color-border));
+}
+
+/* Overdue – etwas satter, aber nicht zu stark */
+.task-card.subject-numa.due-overdue {
+  background: color-mix(in srgb, #fdbeff 20%, var(--color-surface));
+  border-color: color-mix(in srgb, #e8a7ea 42%, var(--color-border));
+}
+
+.task-card.subject-ds.due-overdue {
+  background: color-mix(in srgb, #c8abff 22%, var(--color-surface));
+  border-color: color-mix(in srgb, #b79af0 44%, var(--color-border));
+}
+
+.task-card.subject-se2.due-overdue {
+  background: color-mix(in srgb, #97c0ff 24%, var(--color-surface));
+  border-color: color-mix(in srgb, #88b2ef 46%, var(--color-border));
+}
+
+.task-card.subject-mmt.due-overdue {
+  background: color-mix(in srgb, #99ffaa 25%, var(--color-surface));
+  border-color: color-mix(in srgb, #8fd89b 44%, var(--color-border));
+}
+
+.task-card.subject-other.due-overdue {
+  background: color-mix(in srgb, #ffda96 24%, var(--color-surface));
+  border-color: color-mix(in srgb, #e6c27f 46%, var(--color-border));
+}
+
+.task-card {
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem 0.8rem;
+}
+
+.task-card.compact { padding: 0.8rem; }
+.task-card h3 { margin: 0.35rem 0; font-size: 1rem; }
+
+.task-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: -0.3rem;
+  margin-right: -0.3rem;
+  margin-bottom: 0rem;
+}
+
+.task-subject {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.task-title {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  line-height: 1.2;
+}
+
+.task-title-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.task-actions {
+  flex-wrap: wrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.task-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border));
+}
+
+.task-actions button:hover {
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-primary-soft));
+  border-color: color-mix(in srgb, var(--color-primary) 34%, var(--color-border));
+  transform: translateY(-1px);
+}
+
+.task-actions-top button svg {
+  width: 0.82rem;
+  height: 0.82rem;
+}
+
+.is-done { opacity: 0.5; filter: saturate(0.7); }
+.is-done .task-title-text,
+.is-done .task-title,
+.is-done .task-due,
+.is-done .task-subject { text-decoration: line-through; }
+
+.task-due {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.task-due-soon {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.task-alert,
+.task-card .task-due.task-due-soon,
+.task-card.due-overdue .task-due {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.sortable-task-card {
+  touch-action: none;
+}
+
+.sortable-task-card.is-dragging {
+  opacity: 0.55;
+}
+
+.droppable-task-list {
+  min-height: 80px;
+  border-radius: var(--radius-lg);
+  transition:
+    background var(--transition-interactive),
+    box-shadow var(--transition-interactive),
+    border-color var(--transition-interactive);
+}
+
+.droppable-task-list.is-drop-over {
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
+}
+
+.droppable-task-list.is-empty-list {
+  min-height: 110px;
+  align-content: start;
+}
