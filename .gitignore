@@ -7,9 +7,9 @@ dist
 .vscode
 .idea
 
-projekt-export.md
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+src/projekt-export.md
