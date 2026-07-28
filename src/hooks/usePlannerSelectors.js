@@ -9,6 +9,7 @@ import {
   getWeekEvents,
   getWeekTasks,
 } from "../utils/plannerSelectors";
+import { defaultTaskCategories, defaultEventCategories } from "../data/defaultCategories";
 
 export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDate }) {
   const activeWeekDate = useMemo(() => {
@@ -23,7 +24,7 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
     const start = activeWeekDate;
     const end = new Date(start);
     end.setDate(end.getDate() + 6);
-    return `${formatDate(start)} – ${formatDate(end)}`;
+    return `${formatDate(start)} - ${formatDate(end)}`;
   }, [activeWeekDate]);
 
   const weekRange = useMemo(() => {
@@ -43,39 +44,46 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
 
   const calendarDays = useMemo(() => buildCalendarDays(calendarDate), [calendarDate]);
   const selectedDateKey = useMemo(() => toDateKey(selectedDate), [selectedDate]);
-
   const backlog = useMemo(() => getBacklogTasks(data.tasks), [data.tasks]);
   const weekTasks = useMemo(() => getWeekTasks(data.tasks, activeWeekKey), [data.tasks, activeWeekKey]);
   const selectedDateEvents = useMemo(
     () => getSelectedDateEvents(data.events, selectedDateKey),
-    [data.events, selectedDateKey],
-  );
-
-  const plannedWeekTasksCount = useMemo(
-    () => weekTasks.filter((t) => t.status === "planned").length,
-    [weekTasks],
-  );
-  const doneWeekTasksCount = useMemo(
-    () => weekTasks.filter((t) => t.status === "done").length,
-    [weekTasks],
+    [data.events, selectedDateKey]
   );
 
   const weekEvents = useMemo(() => getWeekEvents(data.events, weekRange), [data.events, weekRange]);
   const eventDates = useMemo(() => getEventDates(data.events), [data.events]);
-
   const dailyTasks = useMemo(() => data.dailyTasks ?? [], [data.dailyTasks]);
-  const totalDailyTasksCount = dailyTasks.length;
-  const doneDailyTasksCount = useMemo(() => countTasksByStatus(dailyTasks, "done"), [dailyTasks]);
 
-  const userCategories = data.userSettings?.categories ?? [];
-  const taskCategories =
-    userCategories.filter((category) => category.kind === "task").length > 0
-      ? userCategories.filter((category) => category.kind === "task")
-      : [];
-  const eventCategories =
-    userCategories.filter((category) => category.kind === "event").length > 0
-      ? userCategories.filter((category) => category.kind === "event")
-      : [];
+  const savedCategories = useMemo(
+    () => data.userSettings?.categories ?? [],
+    [data.userSettings?.categories]
+  );
+
+  const taskCategories = useMemo(() => {
+    const filtered = savedCategories.filter((cat) => cat.kind === "task");
+    return filtered.length > 0 ? filtered : defaultTaskCategories;
+  }, [savedCategories]);
+
+  const eventCategories = useMemo(() => {
+    const filtered = savedCategories.filter((cat) => cat.kind === "event");
+    return filtered.length > 0 ? filtered : defaultEventCategories;
+  }, [savedCategories]);
+
+  const plannedWeekTasksCount = useMemo(
+    () => weekTasks.filter((t) => t.status === "planned").length,
+    [weekTasks]
+  );
+
+  const doneWeekTasksCount = useMemo(
+    () => weekTasks.filter((t) => t.status === "done").length,
+    [weekTasks]
+  );
+
+  const doneDailyTasksCount = useMemo(
+    () => countTasksByStatus(dailyTasks, "done"),
+    [dailyTasks]
+  );
 
   return {
     activeWeekDate,
@@ -93,7 +101,6 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
     plannedWeekTasksCount,
     doneWeekTasksCount,
     doneDailyTasksCount,
-    totalDailyTasksCount,
     taskCategories,
     eventCategories,
   };

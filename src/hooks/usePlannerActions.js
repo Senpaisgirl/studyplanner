@@ -13,6 +13,7 @@ import {
   toggleDailyTaskDoneAction,
   removeTaskAction,
   moveTaskByDnDAction,
+  updateUserSettingsAction,
 } from "../reducers/plannerActions";
 
 export function usePlannerActions({
@@ -141,6 +142,10 @@ export function usePlannerActions({
     );
   }
 
+  function updateUserSettings(settings) {
+    dispatch(updateUserSettingsAction(settings));
+  }
+
   return {
     moveTaskToWeek,
     sendTaskToBacklog,
@@ -156,5 +161,6 @@ export function usePlannerActions({
     goToNextWeek,
     removeTask,
     moveTaskByDnD,
+    updateUserSettings,
   };
 }

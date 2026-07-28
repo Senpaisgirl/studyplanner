@@ -25,6 +25,8 @@ export default function Sidebar({
   toggleDailyTaskDone,
   removeDailyTask,
   removeTask,
+  taskCategories,
+  eventCategories,
 }) {
     function toggleSidebarMode(mode) {
         setSidebarMode((prev) => (prev === mode ? null : mode));
@@ -88,6 +90,7 @@ export default function Sidebar({
                     taskForm={taskForm}
                     setTaskForm={setTaskForm}
                     addTask={addTask}
+                    taskCategories={taskCategories}
                 />
             )}
 
@@ -96,6 +99,7 @@ export default function Sidebar({
                     eventForm={eventForm}
                     setEventForm={setEventForm}
                     addEvent={addEvent}
+                    eventCategories={eventCategories}
                 />
             )}
 

@@ -71,6 +71,7 @@ export async function loadLocalPlannerState() {
 
 export async function saveLocalPlannerState(data) {
   const normalized = normalizePlannerState(data);
+  console.log("WRITING TO LOCALSTORAGE", normalized);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
   return normalized;
 }

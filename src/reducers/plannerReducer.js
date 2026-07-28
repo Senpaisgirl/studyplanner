@@ -16,6 +16,7 @@ export const plannerActionTypes = {
   REMOVE_DAILY_TASK: "REMOVE_DAILY_TASK",
   REMOVE_TASK: "REMOVE_TASK",
   MOVE_TASK_BY_DND: "MOVE_TASK_BY_DND",
+  UPDATE_USER_SETTINGS: "UPDATE_USER_SETTINGS",
 };
 
 function updatePlannerState(state, patch) {
@@ -130,47 +131,56 @@ export function plannerReducer(state, action) {
         tasks: state.tasks.filter((task) => task.id !== action.payload.id),
       });
 
-      case plannerActionTypes.MOVE_TASK_BY_DND: {
-        const { taskId, toContainer, targetIndex, weekKey } = action.payload;
+    case plannerActionTypes.MOVE_TASK_BY_DND: {
+      const { taskId, toContainer, targetIndex, weekKey } = action.payload;
 
-        const currentTasks = [...state.tasks];
-        const movedTask = currentTasks.find((task) => task.id === taskId);
+      const currentTasks = [...state.tasks];
+      const movedTask = currentTasks.find((task) => task.id === taskId);
 
-        if (!movedTask) return state;
+      if (!movedTask) return state;
 
-        const remainingTasks = currentTasks.filter((task) => task.id !== taskId);
+      const remainingTasks = currentTasks.filter((task) => task.id !== taskId);
 
-        const updatedMovedTask = {
-          ...movedTask,
-          bucket: toContainer,
-          weekKey: toContainer === "week" ? weekKey : null,
-          status: "planned",
-        };
+      const updatedMovedTask = {
+        ...movedTask,
+        bucket: toContainer,
+        weekKey: toContainer === "week" ? weekKey : null,
+        status: "planned",
+      };
 
-        const targetTasks = remainingTasks.filter((task) =>
-          toContainer === "week"
-            ? task.bucket === "week" && task.weekKey === weekKey
-            : task.bucket === "backlog"
-        );
+      const targetTasks = remainingTasks.filter((task) =>
+        toContainer === "week"
+          ? task.bucket === "week" && task.weekKey === weekKey
+          : task.bucket === "backlog"
+      );
 
-        const otherTasks = remainingTasks.filter((task) =>
-          toContainer === "week"
-            ? !(task.bucket === "week" && task.weekKey === weekKey)
-            : task.bucket !== "backlog"
-        );
+      const otherTasks = remainingTasks.filter((task) =>
+        toContainer === "week"
+          ? !(task.bucket === "week" && task.weekKey === weekKey)
+          : task.bucket !== "backlog"
+      );
 
-        const nextTargetTasks = [...targetTasks];
-        nextTargetTasks.splice(targetIndex, 0, updatedMovedTask);
+      const nextTargetTasks = [...targetTasks];
+      nextTargetTasks.splice(targetIndex, 0, updatedMovedTask);
 
-        const reorderedTargetTasks = nextTargetTasks.map((task, index) => ({
-          ...task,
-          order: index,
-        }));
+      const reorderedTargetTasks = nextTargetTasks.map((task, index) => ({
+        ...task,
+        order: index,
+      }));
 
-        return updatePlannerState(state, {
-          tasks: [...otherTasks, ...reorderedTargetTasks],
-        });
-      }
+      return updatePlannerState(state, {
+        tasks: [...otherTasks, ...reorderedTargetTasks],
+      });
+    }
+    
+    case plannerActionTypes.UPDATE_USER_SETTINGS:
+      console.log("REDUCER UPDATE_USER_SETTINGS", action.payload);
+      return updatePlannerState(state, {
+        userSettings: {
+          ...(state.userSettings ?? {}),
+          ...action.payload,
+        },
+      });
 
     default:
       return state;

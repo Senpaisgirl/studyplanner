@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePlannerData } from "../hooks/usePlannerData";
-import {
-  defaultEventCategories,
-  defaultTaskCategories,
-} from "../data/defaultCategories";
+import { defaultEventCategories, defaultTaskCategories } from "../data/defaultCategories";
+import { updateUserSettingsAction } from "../reducers/plannerActions";
 import {
   CloseIcon,
   PlusIcon,
@@ -21,15 +19,10 @@ const emptyCategory = (kind) => ({
   baseColor: "#6568f1",
 });
 
-export default function SettingsModal({ onClose }) {
-  const planner = usePlannerData();
-
-  const [theme, setTheme] = useState(planner.theme || "light");
-  const [categories, setCategories] = useState(
-    planner.data.userSettings?.categories?.length
-      ? planner.data.userSettings.categories
-      : [...defaultTaskCategories, ...defaultEventCategories],
-  );
+export default function SettingsModal({ onClose, updateUserSettings, userSettings, setTheme }) {
+  const fallbackCategories = [...defaultTaskCategories, ...defaultEventCategories];
+  const [categories, setCategories] = useState(userSettings?.categories?.length ? userSettings.categories : fallbackCategories);
+  const [themeValue, setThemeValue] = useState(userSettings?.theme ?? "light");
 
   const taskCategories = useMemo(
     () => categories.filter((cat) => cat.kind === "task"),
@@ -65,18 +58,15 @@ export default function SettingsModal({ onClose }) {
   }
 
   function save() {
-    planner.setTheme(theme);
-    planner.dispatch({
-      type: "HYDRATE_PLANNER",
-      payload: {
-        ...planner.data,
-        userSettings: {
-          ...(planner.data.userSettings ?? {}),
-          theme,
-          categories,
-        },
-      },
+    console.log("SAVE CLICKED");
+    console.log("categories before save", categories);
+
+    updateUserSettings({
+      theme: themeValue,
+      categories,
     });
+
+    setTheme(themeValue);
     onClose();
   }
 
@@ -172,9 +162,9 @@ export default function SettingsModal({ onClose }) {
             <div className="settings-theme-toggle" role="group" aria-label="Theme">
               <button
                 type="button"
-                className={theme === "light" ? "is-active" : ""}
-                onClick={() => setTheme("light")}
-                aria-pressed={theme === "light"}
+                className={themeValue === "light" ? "is-active" : ""}
+                onClick={() => setThemeValue("light")}
+                aria-pressed={themeValue === "light"}
                 title="Light theme"
               >
                 <SunIcon />
@@ -183,9 +173,9 @@ export default function SettingsModal({ onClose }) {
 
               <button
                 type="button"
-                className={theme === "dark" ? "is-active" : ""}
-                onClick={() => setTheme("dark")}
-                aria-pressed={theme === "dark"}
+                className={themeValue === "dark" ? "is-active" : ""}
+                onClick={() => setThemeValue("dark")}
+                aria-pressed={themeValue === "dark"}
                 title="Dark theme"
               >
                 <MoonIcon />

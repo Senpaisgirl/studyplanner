@@ -27,9 +27,10 @@ export default function TaskCard({
   const isUrgent = dueState === "overdue";
   
   return (
-    <article className={`task-card ${SUBJECT_COLORS[task.subject] ?? 'subject-other'} ${task.status === 'done' ? 'is-done' : ''}
-    ${compact ? 'compact' : ''} ${dueState ? `due-${dueState}` : ''}`}
-    style={{ background: softBg, borderColor, color: textColor }}>
+    <article className={`task-card ${task.status === "done" ? "is-done" : ""} ${
+      compact ? "compact" : "" } ${dueState ? `due-${dueState}` : ""}`}
+      style={{ background: softBg, borderColor, color: textColor }}
+    >
 
       <div className="task-top">
         <span className="task-subject">{task.subject}</span>

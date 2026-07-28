@@ -71,3 +71,8 @@ export const moveTaskByDnDAction = (taskId, toContainer, targetIndex, weekKey) =
     weekKey,
   },
 });
+
+export const updateUserSettingsAction = (settings) => ({
+  type: plannerActionTypes.UPDATE_USER_SETTINGS,
+  payload: settings,
+});

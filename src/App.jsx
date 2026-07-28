@@ -102,6 +102,8 @@ function App() {
           toggleDailyTaskDone={planner.toggleDailyTaskDone}
           removeDailyTask={planner.removeDailyTask}
           removeTask={planner.removeTask}
+          taskCategories={planner.taskCategories}
+          eventCategories={planner.eventCategories}
         />
 
         <main className="main">
@@ -137,7 +139,12 @@ function App() {
         </main>
       </div>
       {settingsOpen && (
-        <SettingsModal onClose={() => setSettingsOpen(false)} />
+        <SettingsModal
+          onClose={() => setSettingsOpen(false)}
+          updateUserSettings={planner.updateUserSettings}
+          userSettings={planner.data.userSettings}
+          setTheme={planner.setTheme}
+        />
       )}
     </DndContext>
   );

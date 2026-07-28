@@ -2,21 +2,25 @@ import { useEffect, useReducer, useState } from "react";
 import { initialPlannerState } from "../data/initialPlannerState";
 import { plannerActionTypes, plannerReducer } from "../reducers/plannerReducer";
 import { plannerRepository } from "../data/plannerRepository";
+import { defaultTaskCategories, defaultEventCategories } from "../data/defaultCategories";
 
 export function usePlannerStore() {
   const [data, dispatch] = useReducer(plannerReducer, initialPlannerState);
   const [isHydrated, setIsHydrated] = useState(false);
   const [weekOffset, setWeekOffset] = useState(0);
 
+  const taskFormDefaultSubject = defaultTaskCategories[0]?.label ?? "";
+  const eventFormDefaultCategory = defaultEventCategories[0]?.label ?? "";
+
   const [taskForm, setTaskForm] = useState({
     title: "",
-    subject: "NuMa",
+    subject: taskFormDefaultSubject,
     due: "",
   });
 
   const [eventForm, setEventForm] = useState({
     title: "",
-    category: "other",
+    category: eventFormDefaultCategory,
     date: "",
     startTime: "10:00",
     endTime: "11:00",
@@ -82,6 +86,7 @@ export function usePlannerStore() {
 
   useEffect(() => {
     if (!isHydrated) return;
+    console.log("DATA BEFORE SAVE", data);
     plannerRepository.save(data);
   }, [data, isHydrated]);
 
