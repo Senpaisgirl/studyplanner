@@ -67,6 +67,16 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
   const totalDailyTasksCount = dailyTasks.length;
   const doneDailyTasksCount = useMemo(() => countTasksByStatus(dailyTasks, "done"), [dailyTasks]);
 
+  const userCategories = data.userSettings?.categories ?? [];
+  const taskCategories =
+    userCategories.filter((category) => category.kind === "task").length > 0
+      ? userCategories.filter((category) => category.kind === "task")
+      : [];
+  const eventCategories =
+    userCategories.filter((category) => category.kind === "event").length > 0
+      ? userCategories.filter((category) => category.kind === "event")
+      : [];
+
   return {
     activeWeekDate,
     activeWeekKey,
@@ -82,5 +92,9 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
     dailyTasks,
     plannedWeekTasksCount,
     doneWeekTasksCount,
+    doneDailyTasksCount,
+    totalDailyTasksCount,
+    taskCategories,
+    eventCategories,
   };
 }

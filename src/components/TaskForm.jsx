@@ -1,4 +1,4 @@
-export default function TaskForm({ taskForm, setTaskForm, addTask }) {
+export default function TaskForm({ taskForm, setTaskForm, addTask, taskCategories }) {
   return (
     <section className="panel">
       <div className="sidebar-new">Create Task</div>
@@ -18,11 +18,11 @@ export default function TaskForm({ taskForm, setTaskForm, addTask }) {
             setTaskForm({ ...taskForm, subject: e.target.value })
           }
         >
-          <option value="NuMa">Numerische Mathematik</option>
-          <option value="DS">Digitale Spiele</option>
-          <option value="SE2">Softwaretechnik 2</option>
-          <option value="MMT">Medizinische Messtechnik</option>
-          <option value="Sonstiges">Other</option>
+          {taskCategories.map((category) => (
+            <option key={category.id} value={category.label}>
+              {category.label}
+            </option>
+          ))}
         </select>
 
         <input

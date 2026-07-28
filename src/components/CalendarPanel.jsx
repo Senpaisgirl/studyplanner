@@ -1,5 +1,6 @@
 import { toDateKey, formatSelectedDate } from "../utils/date";
 import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, CloseIcon, } from "./Icons";
+import { mixHex, getReadableTextColor } from "../utils/color";
 
 const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -13,7 +14,14 @@ export default function CalendarPanel({
     setCalendarDate,
     setSelectedDate,
     removeEvent,
+    eventCategories,
 }) {
+    const category = eventCategories.find((item) => item.label === event.category);
+    const baseColor = category?.baseColor ?? "#ffeedb";
+    const cardBg = mixHex(baseColor, "#fbfbf8", 0.88);
+    const cardBorder = mixHex(baseColor, "#d4d1ca", 0.45);
+    const cardText = getReadableTextColor(baseColor);
+
     function goToPreviousMonth() {
         setCalendarDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
     }
@@ -106,7 +114,8 @@ export default function CalendarPanel({
                     ) : (
                     <div className='event-list'>
                         {selectedDateEvents.map(event => (
-                        <article key={event.id} className={`event-card ${event.category}`} role='group' aria-label={event.title}>
+                        <article key={event.id} className={`event-card ${event.category}`} role='group' aria-label={event.title}
+                        style={{ background: cardBg, borderColor: cardBorder, color: cardText }}>
                             <div className='event-card-top'>
                             <strong>{event.title}</strong>
                             <button

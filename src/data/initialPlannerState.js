@@ -3,5 +3,9 @@ export const initialPlannerState = {
   dailyTasks: [],
   events: [],
   updatedAt: null,
-  dailyTaskResetat: null,
+  dailyTasksResetAt: null,
+  userSettings: {
+    theme: null,
+    categories: [],
+  },
 };

@@ -31,6 +31,28 @@ export function usePlannerStore() {
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
   );
 
+  useEffect(() => {
+    const savedTheme = data.userSettings?.theme;
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+    }
+  }, [data.userSettings?.theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    plannerRepository.save({
+      ...data,
+      userSettings: {
+        ...(data.userSettings ?? {}),
+        theme,
+      },
+    });
+  }, [theme, isHydrated]);
+
   const [sidebarMode, setSidebarMode] = useState(null);
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -62,10 +84,6 @@ export function usePlannerStore() {
     if (!isHydrated) return;
     plannerRepository.save(data);
   }, [data, isHydrated]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
 
   return {
     data,

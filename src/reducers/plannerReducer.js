@@ -36,6 +36,13 @@ export function plannerReducer(state, action) {
         events: Array.isArray(action.payload?.events) ? action.payload.events : [],
         dailyTasks: Array.isArray(action.payload?.dailyTasks) ? action.payload.dailyTasks : [],
         dailyTasksResetAt: action.payload?.dailyTasksResetAt ?? null,
+        userSettings: {
+          ...initialPlannerState.userSettings,
+          ...(action.payload?.userSettings ?? {}),
+          categories: Array.isArray(action.payload?.userSettings?.categories)
+            ? action.payload.userSettings.categories
+            : [],
+        },
       };
 
     case plannerActionTypes.ADD_TASK:

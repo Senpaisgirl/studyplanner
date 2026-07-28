@@ -14,6 +14,7 @@ export default function WeekBoard({
   selectedDateKey,
   selectedDateEvents,
   eventDates,
+  eventCategories,
   setCalendarDate,
   setSelectedDate,
   removeEvent,
@@ -65,6 +66,7 @@ export default function WeekBoard({
         selectedDateKey={selectedDateKey}
         selectedDateEvents={selectedDateEvents}
         eventDates={eventDates}
+        eventCategories={eventCategories}
         setCalendarDate={setCalendarDate}
         setSelectedDate={setSelectedDate}
         removeEvent={removeEvent}

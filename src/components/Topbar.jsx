@@ -1,5 +1,8 @@
 import { getWeekNumber } from "../utils/date";
-import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, } from "./Icons";
+import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, SettingsIcon } from "./Icons";
+import { useState } from "react";
+import SettingsModal from "./SettingsModal";
+
 
 export default function Topbar ({
     weekLabel,
@@ -11,7 +14,9 @@ export default function Topbar ({
     goToCurrentWeek,
     goToNextWeek,
     activeWeekDate,
+    onOpenSettings,
 }) {
+    const [settingsOpen, setSettingsOpen] = useState(false);
     
     function Stat({ label, value }) {
         return (
@@ -64,7 +69,19 @@ export default function Topbar ({
                 <Stat label="Planned" value={plannedWeekTasksCount} />
                 <Stat label="Done" value={doneWeekTasksCount} />
                 <Stat label="Events" value={weekEventsCount} />
+                <button
+                    type="button"
+                    className="week-nav-btn icon-only"
+                    onClick={onOpenSettings}
+                    aria-label="Settings"
+                    title="Settings"
+                >
+                    <SettingsIcon />
+                </button>
             </div>
+            {settingsOpen && (
+                <SettingsModal onClose={() => setSettingsOpen(false)} />
+            )}
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import { formatDueDate, getDueState } from '../utils/date'
-import { SUBJECT_COLORS } from '../data/subjectColors';
+import { mixHex, getReadableTextColor } from "../utils/color";
+import { usePlannerData } from "../hooks/usePlannerData";
 import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon, CloseIcon } from './Icons';
 
 export default function TaskCard({
@@ -13,12 +14,22 @@ export default function TaskCard({
   hideBacklogAction = false,
   hideDeleteAction = false,
 }) {
+  const planner = usePlannerData();
+  const categories = planner.taskCategories ?? [];
+  const category = categories.find((item) => item.label === task.subject);
+  const baseColor = category?.baseColor ?? "#ffda96";
+
+  const borderColor = mixHex(baseColor, "#d4d1ca", 0.45);
+  const softBg = mixHex(baseColor, "#fbfbf8", 0.9);
+  const textColor = getReadableTextColor(baseColor);
+
   const dueState = getDueState(task.due);
-  const isUrgent = dueState === 'overdue'
+  const isUrgent = dueState === "overdue";
   
   return (
     <article className={`task-card ${SUBJECT_COLORS[task.subject] ?? 'subject-other'} ${task.status === 'done' ? 'is-done' : ''}
-    ${compact ? 'compact' : ''} ${dueState ? `due-${dueState}` : ''}`}>
+    ${compact ? 'compact' : ''} ${dueState ? `due-${dueState}` : ''}`}
+    style={{ background: softBg, borderColor, color: textColor }}>
 
       <div className="task-top">
         <span className="task-subject">{task.subject}</span>

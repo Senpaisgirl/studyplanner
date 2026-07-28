@@ -11,7 +11,7 @@ export default function DailyTasksPanel({
     <section className="panel backlog-panel">
       <div className="panel-head">
         <h2>Daily Tasks</h2>
-        <strong>{doneDailyCount}{dailyTasks.length}</strong>
+        <strong>{doneDailyCount}/{dailyTasks.length}</strong>
       </div>
 
       <div className="task-list compact">

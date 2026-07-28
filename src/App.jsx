@@ -2,6 +2,8 @@ import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
 import WeekBoard from "./components/WeekBoard";
 import { usePlannerData } from "./hooks/usePlannerData";
+import { useState } from "react";
+import SettingsModal from "./components/SettingsModal";
 
 import {
   DndContext,
@@ -20,9 +22,11 @@ import "./styles/task-card.css";
 import "./styles/calendar.css";
 import "./styles/topbar.css";
 import "./styles/sidebar.css";
+import "./styles/settings-modal.css";
 
 function App() {
   const planner = usePlannerData();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -110,6 +114,7 @@ function App() {
             goToCurrentWeek={planner.goToCurrentWeek}
             goToNextWeek={planner.goToNextWeek}
             activeWeekDate={planner.activeWeekDate}
+            onOpenSettings={() => setSettingsOpen(true)}
           />
 
           <WeekBoard
@@ -123,6 +128,7 @@ function App() {
             selectedDateKey={planner.selectedDateKey}
             selectedDateEvents={planner.selectedDateEvents}
             eventDates={planner.eventDates}
+            eventCategories={planner.eventCategories}
             setCalendarDate={planner.setCalendarDate}
             setSelectedDate={planner.setSelectedDate}
             removeEvent={planner.removeEvent}
@@ -130,6 +136,9 @@ function App() {
           />
         </main>
       </div>
+      {settingsOpen && (
+        <SettingsModal onClose={() => setSettingsOpen(false)} />
+      )}
     </DndContext>
   );
 }
