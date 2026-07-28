@@ -99,7 +99,7 @@ export default function SettingsModal({ onClose, updateUserSettings, userSetting
 
         <div className="settings-row-actions">
           <label className="settings-color-field" title="Choose color">
-            <span className="sr-only">Category color</span>
+            <span className="sr-only">Category Color</span>
             <input
               type="color"
               value={cat.baseColor}
