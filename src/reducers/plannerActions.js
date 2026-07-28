@@ -41,3 +41,33 @@ export const goToCurrentWeekAction = () => ({
 export const goToNextWeekAction = () => ({
   type: plannerActionTypes.GO_TO_NEXT_WEEK,
 });
+
+export const addDailyTaskAction = (task) => ({
+  type: plannerActionTypes.ADD_DAILY_TASK,
+  payload: task,
+});
+
+export const toggleDailyTaskDoneAction = (id) => ({
+  type: plannerActionTypes.TOGGLE_DAILY_TASK_DONE,
+  payload: { id },
+});
+
+export const removeDailyTaskAction = (id) => ({
+  type: plannerActionTypes.REMOVE_DAILY_TASK,
+  payload: { id },
+});
+
+export const removeTaskAction = (id) => ({
+  type: plannerActionTypes.REMOVE_TASK,
+  payload: { id },
+});
+
+export const moveTaskByDnDAction = (taskId, toContainer, targetIndex, weekKey) => ({
+  type: plannerActionTypes.MOVE_TASK_BY_DND,
+  payload: {
+    taskId,
+    toContainer,
+    targetIndex,
+    weekKey,
+  },
+});

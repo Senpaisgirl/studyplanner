@@ -1,8 +1,17 @@
 import { formatDueDate, getDueState } from '../utils/date'
 import { SUBJECT_COLORS } from '../data/subjectColors';
-import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon } from './Icons';
+import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon, CloseIcon } from './Icons';
 
-export default function TaskCard({ task, onDone, onBacklog, onMoveToWeek, compact = false, hidenWeekAction = false, hideBacklogAction = false }) {
+export default function TaskCard({
+  task,
+  onDone,
+  onBacklog,
+  onMoveToWeek,
+  compact = false,
+  hideWeekAction = false,
+  hideBacklogAction = false,
+  hideDeleteAction = false,
+}) {
   const dueState = getDueState(task.due);
   const isUrgent = dueState === 'overdue'
   
@@ -22,23 +31,36 @@ export default function TaskCard({ task, onDone, onBacklog, onMoveToWeek, compac
             {task.status === 'done' ? <UndoIcon /> : <CheckIcon />}
           </button>
 
-          {task.bucket === 'backlog' ? (
+          {!hideWeekAction && (
+            task.bucket === 'backlog' ? (
+              <button
+                type="button"
+                onClick={() => onMoveToWeek(task.id)}
+                aria-label="This week"
+                title="This week"
+              >
+                <WeekIcon />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onBacklog(task.id)}
+                aria-label="Into Backlog"
+                title="Into Backlog"
+              >
+                <BacklogIcon />
+              </button>
+            )
+          )}
+
+          {!hideDeleteAction && (
             <button
               type="button"
-              onClick={() => onMoveToWeek(task.id)}
-              aria-label="This week"
-              title="This week"
+              onClick={() => onDelete?.(task.id)}
+              aria-label="Delete task"
+              title="Delete task"
             >
-              <WeekIcon />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => onBacklog(task.id)}
-              aria-label="Into Backlog"
-              title="Into Backlog"
-            >
-              <BacklogIcon />
+              <CloseIcon />
             </button>
           )}
         </div>

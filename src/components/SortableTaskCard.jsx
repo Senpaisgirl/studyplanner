@@ -7,6 +7,7 @@ export default function SortableTaskCard({
   onDone,
   onBacklog,
   onMoveToWeek,
+  onDelete,
   compact = false,
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, } = useSortable({
@@ -35,6 +36,7 @@ export default function SortableTaskCard({
           onDone={onDone}
           onBacklog={onBacklog}
           onMoveToWeek={onMoveToWeek}
+          onDelete={onDelete}
           compact={compact}
         />
       </div>

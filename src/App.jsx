@@ -85,19 +85,28 @@ function App() {
           setTaskForm={planner.setTaskForm}
           eventForm={planner.eventForm}
           setEventForm={planner.setEventForm}
+          dailyTaskForm={planner.dailyTaskForm}
+          setDailyTaskForm={planner.setDailyTaskForm}
           addTask={planner.addTask}
           addEvent={planner.addEvent}
+          addDailyTask={planner.addDailyTask}
           backlog={planner.backlog}
+          dailyTasks={planner.dailyTasks}
           toggleDone={planner.toggleDone}
           sendTaskToBacklog={planner.sendTaskToBacklog}
           moveTaskToWeek={planner.moveTaskToWeek}
+          toggleDailyTaskDone={planner.toggleDailyTaskDone}
+          removeDailyTask={planner.removeDailyTask}
+          removeTask={planner.removeTask}
         />
 
         <main className="main">
           <Topbar
             weekLabel={planner.weekLabel}
-            plannedWeekTasksCount={planner.plannedWeekTasksCount}
+            totalWeekTasksCount={planner.totalWeekTasksCount}
             doneWeekTasksCount={planner.doneWeekTasksCount}
+            totalDailyTasksCount={planner.totalDailyTasksCount}
+            doneDailyTasksCount={planner.doneDailyTasksCount}
             weekEventsCount={planner.weekEventsCount}
             goToPreviousWeek={planner.goToPreviousWeek}
             goToCurrentWeek={planner.goToCurrentWeek}
@@ -119,6 +128,7 @@ function App() {
             setCalendarDate={planner.setCalendarDate}
             setSelectedDate={planner.setSelectedDate}
             removeEvent={planner.removeEvent}
+            removeTask={planner.removeTask}
           />
         </main>
       </div>

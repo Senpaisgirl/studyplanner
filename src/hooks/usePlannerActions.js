@@ -8,6 +8,11 @@ import {
   goToPreviousWeekAction,
   goToCurrentWeekAction,
   goToNextWeekAction,
+  addDailyTaskAction,
+  removeDailyTaskAction,
+  toggleDailyTaskDoneAction,
+  removeTaskAction,
+  moveTaskByDnDAction,
 } from "../reducers/plannerActions";
 
 export function usePlannerActions({
@@ -17,20 +22,9 @@ export function usePlannerActions({
   taskForm,
   eventForm,
   activeWeekKey,
-  setWeekOffset,
+  dailyTaskForm,
+  setDailyTaskForm,
 }) {
-  function goToPreviousWeek() {
-    setWeekOffset((prev) => prev - 1);
-  }
-
-  function goToCurrentWeek() {
-    setWeekOffset(0);
-  }
-
-  function goToNextWeek() {
-    setWeekOffset((prev) => prev + 1);
-  }
-
   function moveTaskToWeek(taskId) {
     dispatch(moveTaskToWeekAction(taskId, activeWeekKey));
   }
@@ -93,6 +87,33 @@ export function usePlannerActions({
     dispatch(removeEventAction(id));
   }
 
+  function addDailyTask(e) {
+    e.preventDefault();
+    if (!dailyTaskForm.title.trim()) return;
+
+    dispatch(
+      addDailyTaskAction({
+        id: crypto.randomUUID(),
+        title: dailyTaskForm.title.trim(),
+        subject: dailyTaskForm.subject,
+        status: "planned",
+      }),
+    );
+
+    setDailyTaskForm((prev) => ({
+      ...prev,
+      title: "",
+    }));
+  }
+
+  function toggleDailyTaskDone(taskId) {
+    dispatch(toggleDailyTaskDoneAction(taskId));
+  }
+
+  function removeDailyTask(taskId) {
+    dispatch(removeDailyTaskAction(taskId));
+  }
+
   function goToPreviousWeek() {
     dispatch(goToPreviousWeekAction());
   }
@@ -105,18 +126,35 @@ export function usePlannerActions({
     dispatch(goToNextWeekAction());
   }
 
+  function removeTask(taskId) {
+    dispatch(removeTaskAction(taskId));
+  }
+
+  function moveTaskByDnD(taskId, toContainer, targetIndex) {
+    dispatch(
+      moveTaskByDnDAction(
+        taskId,
+        toContainer,
+        targetIndex,
+        toContainer === "week" ? activeWeekKey : null,
+      ),
+    );
+  }
+
   return {
-    goToPreviousWeek,
-    goToCurrentWeek,
-    goToNextWeek,
     moveTaskToWeek,
     sendTaskToBacklog,
     toggleDone,
     addTask,
     addEvent,
     removeEvent,
+    addDailyTask,
+    toggleDailyTaskDone,
+    removeDailyTask,
     goToPreviousWeek,
     goToCurrentWeek,
     goToNextWeek,
+    removeTask,
+    moveTaskByDnD,
   };
 }

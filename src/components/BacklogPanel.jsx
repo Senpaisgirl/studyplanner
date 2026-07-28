@@ -7,6 +7,7 @@ export default function BacklogPanel({
   toggleDone,
   sendTaskToBacklog,
   moveTaskToWeek,
+  removeTask,
 }) {
   return (
     <section className="panel backlog-panel">
@@ -34,6 +35,7 @@ export default function BacklogPanel({
                 onDone={toggleDone}
                 onBacklog={sendTaskToBacklog}
                 onMoveToWeek={moveTaskToWeek}
+                onDelete={removeTask}
                 compact
               />
             ))

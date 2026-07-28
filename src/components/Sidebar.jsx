@@ -1,7 +1,9 @@
-import { TaskTabIcon, EventTabIcon } from "./Icons";
+import { TaskTabIcon, EventTabIcon, RepeatIcon } from "./Icons";
 import TaskForm from "./TaskForm";
 import EventForm from "./EventForm";
 import BacklogPanel from "./BacklogPanel";
+import DailyTaskForm from "./DailyTaskForm";
+import DailyTasksPanel from "./DailyTasksPanel";
 
 export default function Sidebar({
   sidebarMode,
@@ -10,18 +12,24 @@ export default function Sidebar({
   setTaskForm,
   eventForm,
   setEventForm,
+  dailyTaskForm,
+  setDailyTaskForm,
   addTask,
   addEvent,
+  addDailyTask,
   backlog,
   toggleDone,
   sendTaskToBacklog,
-  dailyTasks,
-  toggleDone,
-  sendTaskToBacklog,
   moveTaskToWeek,
+  dailyTasks,
   toggleDailyTaskDone,
   removeDailyTask,
+  removeTask,
 }) {
+    function toggleSidebarMode(mode) {
+        setSidebarMode((prev) => (prev === mode ? null : mode));
+    }
+
     return (
         <aside className="sidebar">
             <div className="brand">
@@ -110,11 +118,8 @@ export default function Sidebar({
                 toggleDone={toggleDone}
                 sendTaskToBacklog={sendTaskToBacklog}
                 moveTaskToWeek={moveTaskToWeek}
+                removeTask={removeTask}
             />
         </aside>
     );
-}
-
-function toggleSidebarMode(mode) {
-    setSidebarMode((prev) => (prev === mode ? null : mode));
 }

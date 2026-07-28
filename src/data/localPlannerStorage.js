@@ -1,13 +1,46 @@
 import { initialPlannerState } from "./initialPlannerState";
 
-const STORAGE_KEY = "lernplan-app-v1";
+const STORAGE_KEY = "studyplanner-app-v1";
+
+function getResetDateForToday() {
+  const now = new Date();
+  const reset = new Date(now);
+  reset.setHours(4, 0, 0, 0);
+
+  if (now < reset) {
+    reset.setDate(reset.getDate() - 1);
+  }
+
+  return reset.toISOString();
+}
+
+function shouldResetDailyTasks(value) {
+  const resetAt = value?.dailyTasksResetAt;
+  if (!resetAt) return true;
+
+  const lastReset = new Date(resetAt);
+  const todayReset = new Date();
+  todayReset.setHours(4, 0, 0, 0);
+
+  const now = new Date();
+  if (now < todayReset) {
+    todayReset.setDate(todayReset.getDate() - 1);
+  }
+
+  return lastReset < todayReset;
+}
 
 function normalizePlannerState(value) {
+  const resetAt = value?.dailyTasksResetAt ?? null;
+  const resetNeeded = shouldResetDailyTasks(value);
+
   return {
     ...initialPlannerState,
     ...value,
     tasks: Array.isArray(value?.tasks) ? value.tasks : [],
     events: Array.isArray(value?.events) ? value.events : [],
+    dailyTasks: resetNeeded ? [] : (Array.isArray(value?.dailyTasks) ? value.dailyTasks : []),
+    dailyTasksResetAt: resetNeeded ? getResetDateForToday() : resetAt,
   };
 }
 

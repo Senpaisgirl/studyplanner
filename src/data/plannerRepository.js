@@ -14,6 +14,7 @@ function normalizePlannerState(value) {
     ...value,
     tasks: Array.isArray(value?.tasks) ? value.tasks : [],
     events: Array.isArray(value?.events) ? value.events : [],
+    dailyTasks: Array.isArray(value?.dailyTasks) ? value.dailyTasks : [],
   };
 }
 

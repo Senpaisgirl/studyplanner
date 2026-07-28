@@ -3,8 +3,10 @@ import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, } from "./Icons";
 
 export default function Topbar ({
     weekLabel,
-    plannedWeekTasksCount,
+    totalWeekTasksCount,
     doneWeekTasksCount,
+    totalDailyTasksCount,
+    doneDailyTasksCount,
     weekEventsCount,
     goToPreviousWeek,
     goToCurrentWeek,
@@ -60,9 +62,9 @@ export default function Topbar ({
             </div>
 
             <div className="topbar-right stats">
-            <Stat label="Planned" value={plannedWeekTasksCount} />
-            <Stat label="Done" value={doneWeekTasksCount} />
-            <Stat label="Events" value={weekEventsCount} />
+                <Stat label="Weekly" value={`${doneWeekTasksCount}/${totalWeekTasksCount}`} />
+                <Stat label="Daily" value={`${doneDailyTasksCount}/${totalDailyTasksCount}`} />
+                <Stat label="Events" value={weekEventsCount} />
             </div>
         </div>
     )

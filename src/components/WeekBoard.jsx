@@ -17,6 +17,7 @@ export default function WeekBoard({
   setCalendarDate,
   setSelectedDate,
   removeEvent,
+  removeTask,
 }) {
   return (
     <section className="board-grid">
@@ -46,6 +47,7 @@ export default function WeekBoard({
                     onDone={toggleDone}
                     onBacklog={sendTaskToBacklog}
                     onMoveToWeek={moveTaskToWeek}
+                    onDelete={removeTask}
                   />
                 ))
               )}

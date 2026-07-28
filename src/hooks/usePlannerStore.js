@@ -22,11 +22,16 @@ export function usePlannerStore() {
     endTime: "11:00",
   });
 
+  const [dailyTaskForm, setDailyTaskForm] = useState({
+    title: "",
+    subject: "Sonstiges",
+  });
+
   const [theme, setTheme] = useState(() =>
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
   );
 
-  const [sidebarMode, setSidebarMode] = useState("null");
+  const [sidebarMode, setSidebarMode] = useState(null);
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -71,6 +76,8 @@ export function usePlannerStore() {
     setTaskForm,
     eventForm,
     setEventForm,
+    dailyTaskForm,
+    setDailyTaskForm,
     theme,
     setTheme,
     sidebarMode,
