@@ -13,6 +13,7 @@ export const plannerActionTypes = {
   REMOVE_DAILY_TASK: "REMOVE_DAILY_TASK",
   REMOVE_TASK: "REMOVE_TASK",
   MOVE_TASK_BY_DND: "MOVE_TASK_BY_DND",
+  MOVE_DAILY_TASK_BY_DND: "MOVE_DAILY_TASK_BY_DND",
   UPDATE_USER_SETTINGS: "UPDATE_USER_SETTINGS",
   REORDER_DAILY_TASKS: "REORDER_DAILY_TASKS",
 };
@@ -170,6 +171,35 @@ export function plannerReducer(state, action) {
         tasks: [...otherTasks, ...reorderedTargetTasks],
       });
     }
+
+    case plannerActionTypes.MOVE_DAILY_TASK_BY_DND: {
+    const { taskId, targetIndex } = action.payload;
+
+    const currentDailyTasks = [...(state.dailyTasks ?? [])];
+    const movedTask = currentDailyTasks.find((task) => task.id === taskId);
+
+    if (!movedTask) return state;
+
+    const remainingDailyTasks = currentDailyTasks.filter(
+      (task) => task.id !== taskId,
+    );
+
+    const nextDailyTasks = [...remainingDailyTasks];
+    nextDailyTasks.splice(targetIndex, 0, {
+      ...movedTask,
+      bucket: "daily",
+    });
+
+    const reorderedDailyTasks = nextDailyTasks.map((task, index) => ({
+      ...task,
+      bucket: "daily",
+      order: index,
+    }));
+
+    return updatePlannerState(state, {
+      dailyTasks: reorderedDailyTasks,
+    });
+  }
     
     case plannerActionTypes.UPDATE_USER_SETTINGS:
       return updatePlannerState(state, {

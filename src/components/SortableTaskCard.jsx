@@ -9,6 +9,9 @@ export default function SortableTaskCard({
   onMoveToWeek,
   onDelete,
   compact = false,
+  hideWeekAction = false,
+  hideBacklogAction = false,
+  hideDeleteAction = false,
 }) {
   const {
     attributes,
@@ -55,6 +58,9 @@ export default function SortableTaskCard({
         onMoveToWeek={onMoveToWeek}
         onDelete={onDelete}
         compact={compact}
+        hideWeekAction={hideWeekAction}
+        hideBacklogAction={hideBacklogAction}
+        hideDeleteAction={hideDeleteAction}
       />
     </div>
   );

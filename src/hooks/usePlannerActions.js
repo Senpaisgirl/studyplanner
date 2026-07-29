@@ -10,6 +10,7 @@ import {
   toggleDailyTaskDoneAction,
   removeTaskAction,
   moveTaskByDnDAction,
+  moveDailyTaskByDnDAction,
   updateUserSettingsAction,
   reorderDailyTasksAction,
 } from "../reducers/plannerActions";
@@ -101,6 +102,7 @@ export function usePlannerActions({
         title: dailyTaskForm.title.trim(),
         subject: dailyTaskForm.subject,
         status: "planned",
+        bucket: "daily",
       }),
     );
 
@@ -145,6 +147,10 @@ export function usePlannerActions({
     );
   }
 
+  function moveDailyTaskByDnD(taskId, targetIndex) {
+    dispatch(moveDailyTaskByDnDAction(taskId, targetIndex));
+  }
+
   function updateUserSettings(settings) {
     dispatch(updateUserSettingsAction(settings));
   }
@@ -168,6 +174,7 @@ export function usePlannerActions({
     goToNextWeek,
     removeTask,
     moveTaskByDnD,
+    moveDailyTaskByDnD,
     updateUserSettings,
     reorderDailyTasks,
   };

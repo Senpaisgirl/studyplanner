@@ -60,6 +60,14 @@ export const moveTaskByDnDAction = (taskId, toContainer, targetIndex, weekKey) =
   },
 });
 
+export const moveDailyTaskByDnDAction = (taskId, targetIndex) => ({
+  type: plannerActionTypes.MOVE_DAILY_TASK_BY_DND,
+  payload: {
+    taskId,
+    targetIndex,
+  },
+});
+
 export const updateUserSettingsAction = (settings) => ({
   type: plannerActionTypes.UPDATE_USER_SETTINGS,
   payload: settings,
