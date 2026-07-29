@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-export default function TaskForm({ taskForm, setTaskForm, addTask, taskCategories }) {
+export default function TaskForm({
+  taskForm,
+  setTaskForm,
+  addTask,
+  taskCategories
+}) {
   const [titleError, setTitleError] = useState("");
 
   function handleSubmit(e) {
