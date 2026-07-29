@@ -1,9 +1,10 @@
+import { useMemo, useState } from "react";
 import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
 import WeekBoard from "./components/WeekBoard";
-import { usePlannerData } from "./hooks/usePlannerData";
-import { useState } from "react";
 import SettingsModal from "./components/SettingsModal";
+import TaskCard from "./components/TaskCard";
+import { usePlannerData } from "./hooks/usePlannerData";
 
 import {
   DndContext,
@@ -14,9 +15,7 @@ import {
   useSensors,
   closestCorners,
 } from "@dnd-kit/core";
-import {
-  sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import "./styles/board.css";
 import "./styles/task-card.css";
@@ -28,6 +27,7 @@ import "./styles/settings-modal.css";
 function App({ authUser, onLogout }) {
   const planner = usePlannerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -40,32 +40,51 @@ function App({ authUser, onLogout }) {
     }),
   );
 
+  const activeTask = useMemo(() => {
+    if (!activeTaskId) return null;
+
+    return (
+      planner.weekTasks.find((task) => task.id === activeTaskId) ||
+      planner.backlog.find((task) => task.id === activeTaskId) ||
+      planner.dailyTasks.find((task) => task.id === activeTaskId) ||
+      null
+    );
+  }, [activeTaskId, planner.weekTasks, planner.backlog, planner.dailyTasks]);
+
   function getContainerId(id) {
-    if (id === "week" || id === "backlog") return id;
+    if (id === "week" || id === "backlog" || id === "daily") return id;
+
     if (planner.weekTasks.some((task) => task.id === id)) return "week";
     if (planner.backlog.some((task) => task.id === id)) return "backlog";
     if (planner.dailyTasks.some((task) => task.id === id)) return "daily";
+
     return null;
   }
 
+  function getItemsByContainer(containerId) {
+    if (containerId === "week") return planner.weekTasks;
+    if (containerId === "backlog") return planner.backlog;
+    if (containerId === "daily") return planner.dailyTasks;
+    return [];
+  }
+
   function getIndexInContainer(taskId, containerId) {
-    if (containerId === "week") {
-      return planner.weekTasks.findIndex((task) => task.id === taskId);
-    }
+    const items = getItemsByContainer(containerId);
+    return items.findIndex((task) => task.id === taskId);
+  }
 
-    if (containerId === "backlog") {
-      return planner.backlog.findIndex((task) => task.id === taskId);
-    }
+  function handleDragStart(event) {
+    setActiveTaskId(event.active.id);
+  }
 
-    if (containerId === "daily") {
-      return planner.dailyTasks.findIndex((task) => task.id === taskId);
-    }
-
-    return -1;
+  function handleDragCancel() {
+    setActiveTaskId(null);
   }
 
   function handleDragEnd(event) {
     const { active, over } = event;
+    setActiveTaskId(null);
+
     if (!over) return;
 
     const activeId = active.id;
@@ -76,29 +95,29 @@ function App({ authUser, onLogout }) {
 
     if (!fromContainer || !toContainer) return;
 
-    if (fromContainer === "daily" || toContainer === "daily") {
-      if (fromContainer !== "daily" || toContainer !== "daily") return;
+    if (overId === "week" || overId === "backlog" || overId === "daily") {
+      const targetItems = getItemsByContainer(toContainer);
 
-      if (overId === "daily") {
-        planner.reorderDailyTasks(activeId, planner.dailyTasks.length);
+      if (toContainer === "daily") {
+        if (typeof planner.moveDailyTaskByDnD === "function") {
+          planner.moveDailyTaskByDnD(activeId, targetItems.length);
+        }
         return;
       }
 
-      const targetIndex = getIndexInContainer(overId, "daily");
-      if (targetIndex === -1) return;
-
-      planner.reorderDailyTasks(activeId, targetIndex);
-      return;
-    }
-
-    if (overId === "week" || overId === "backlog") {
-      const targetItems = toContainer === "week" ? planner.weekTasks : planner.backlog;
       planner.moveTaskByDnD(activeId, toContainer, targetItems.length);
       return;
     }
 
     const targetIndex = getIndexInContainer(overId, toContainer);
     if (targetIndex === -1) return;
+
+    if (toContainer === "daily") {
+      if (typeof planner.moveDailyTaskByDnD === "function") {
+        planner.moveDailyTaskByDnD(activeId, targetIndex);
+      }
+      return;
+    }
 
     planner.moveTaskByDnD(activeId, toContainer, targetIndex);
   }
@@ -107,6 +126,8 @@ function App({ authUser, onLogout }) {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragCancel={handleDragCancel}
       onDragEnd={handleDragEnd}
     >
       <div className="app-shell">
@@ -132,7 +153,6 @@ function App({ authUser, onLogout }) {
           removeTask={planner.removeTask}
           taskCategories={planner.taskCategories}
           eventCategories={planner.eventCategories}
-          reorderDailyTasks={planner.reorderDailyTasks}
         />
 
         <main className="main">
@@ -140,6 +160,7 @@ function App({ authUser, onLogout }) {
             weekLabel={planner.weekLabel}
             plannedWeekTasksCount={planner.plannedWeekTasksCount}
             doneWeekTasksCount={planner.doneWeekTasksCount}
+            doneDailyTasksCount={planner.doneDailyTasksCount}
             weekEventsCount={planner.weekEventsCount}
             goToPreviousWeek={planner.goToPreviousWeek}
             goToCurrentWeek={planner.goToCurrentWeek}
@@ -169,6 +190,32 @@ function App({ authUser, onLogout }) {
           />
         </main>
       </div>
+
+      <DragOverlay>
+        {activeTask ? (
+          <div style={{ width: 320, pointerEvents: "none" }}>
+            <TaskCard
+              task={activeTask}
+              onDone={
+                activeTask.bucket === "daily"
+                  ? planner.toggleDailyTaskDone
+                  : planner.toggleDone
+              }
+              onBacklog={planner.sendTaskToBacklog}
+              onMoveToWeek={planner.moveTaskToWeek}
+              onDelete={
+                activeTask.bucket === "daily"
+                  ? planner.removeDailyTask
+                  : planner.removeTask
+              }
+              compact={activeTask.bucket === "backlog" || activeTask.bucket === "daily"}
+              hideWeekAction={activeTask.bucket === "daily"}
+              hideBacklogAction={activeTask.bucket === "daily"}
+            />
+          </div>
+        ) : null}
+      </DragOverlay>
+
       {settingsOpen && (
         <SettingsModal
           onClose={() => setSettingsOpen(false)}
