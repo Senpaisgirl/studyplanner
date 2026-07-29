@@ -173,39 +173,6 @@
     gap: var(--space-2);
 }
 
-.event-card.doctor .event-card-top button {
-  background: color-mix(in srgb, var(--color-doctor) 88%, rgb(129, 129, 129));
-  color: white;
-}
-.event-card.exam .event-card-top button {
-  background: color-mix(in srgb, var(--color-exam) 88%, rgb(129, 129, 129));
-  color: white;
-}
-.event-card.bday .event-card-top button {
-  background: color-mix(in srgb, var(--color-bday) 88%, rgb(129, 129, 129));
-  color: white;
-}
-.event-card.other .event-card-top button {
-  background: color-mix(in srgb, var(--color-other) 88%, rgb(129, 129, 129));
-  color: white;
-}
-
-.event-card.doctor .event-card-top button:hover {
-  background: color-mix(in srgb, var(--color-doctor) 94%, rgb(110, 110, 110));
-}
-
-.event-card.exam .event-card-top button:hover {
-  background: color-mix(in srgb, var(--color-exam) 94%, rgb(110, 110, 110));
-}
-
-.event-card.bday .event-card-top button:hover {
-  background: color-mix(in srgb, var(--color-bday) 94%, rgb(110, 110, 110));
-}
-
-.event-card.other .event-card-top button:hover {
-  background: color-mix(in srgb, var(--color-other) 94%, rgb(110, 110, 110));
-}
-
 .event-card {
   padding: var(--space-3);
   border-radius: var(--radius-md);

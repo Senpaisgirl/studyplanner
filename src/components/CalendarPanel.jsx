@@ -6,6 +6,7 @@ import {
   CloseIcon,
 } from "./Icons";
 import { mixHex, getReadableTextColor } from "../utils/color";
+import { defaultEventCategories } from "../data/defaultCategories";
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -21,6 +22,7 @@ export default function CalendarPanel({
   setSelectedDate,
   removeEvent,
 }) {
+
   function goToPreviousMonth() {
     setCalendarDate(
       (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
@@ -135,9 +137,9 @@ export default function CalendarPanel({
         ) : (
           <div className="event-list">
             {selectedDateEvents.map((event) => {
-              const category = eventCategories.find(
-                (item) => item.id === event.categoryId
-              );
+              const category = eventCategories.find((item) => item.id === event.categoryId) ||
+                defaultEventCategories.find((item) => item.id === event.categoryId);
+              const categoryLabel = category?.label ?? "Other";
 
               const baseColor = category?.baseColor ?? "#ffeedb";
               const cardBg = mixHex(baseColor, "#fbfbf8", 0.88);
@@ -170,7 +172,7 @@ export default function CalendarPanel({
                   </div>
 
                   <p>
-                    {event.startTime} - {event.endTime}
+                    {event.startTime} - {event.endTime} {categoryLabel}
                   </p>
                 </article>
               );
