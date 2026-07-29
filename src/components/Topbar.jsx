@@ -1,5 +1,5 @@
 import { getWeekNumber } from "../utils/date";
-import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, SettingsIcon } from "./Icons";
+import { ChevronLeftIcon, ChevronRightIcon, TodayIcon, SettingsIcon, LogoutIcon } from "./Icons";
 import { useState } from "react";
 import SettingsModal from "./SettingsModal";
 
@@ -15,6 +15,8 @@ export default function Topbar ({
     goToNextWeek,
     activeWeekDate,
     onOpenSettings,
+    authUser,
+    onLogout,
 }) {
     const [settingsOpen, setSettingsOpen] = useState(false);
     
@@ -69,6 +71,22 @@ export default function Topbar ({
                 <Stat label="Planned" value={plannedWeekTasksCount} />
                 <Stat label="Done" value={doneWeekTasksCount} />
                 <Stat label="Events" value={weekEventsCount} />
+
+                {authUser && (
+                    <div className="topbar-account">
+                    <span className="topbar-account-email">{authUser.email}</span>
+                    <button
+                        type="button"
+                        className="ghost-btn"
+                        onClick={onLogout}
+                        aria-label="Logout"
+                        title="Logout"
+                    >
+                        <LogoutIcon />
+                    </button>
+                    </div>
+                )}
+
                 <button
                     type="button"
                     className="week-nav-btn icon-only"

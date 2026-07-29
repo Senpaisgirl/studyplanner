@@ -109,3 +109,40 @@
 }
 
 .week-label { margin: 0.4rem 0 1rem; font-size: var(--text-sm); }
+
+.topbar-account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 72px;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-account-email {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 1100px) {
+  .topbar-right {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .topbar-account {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .topbar-account-email {
+    max-width: none;
+  }
+}

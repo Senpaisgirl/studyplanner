@@ -24,7 +24,7 @@ import "./styles/topbar.css";
 import "./styles/sidebar.css";
 import "./styles/settings-modal.css";
 
-function App() {
+function App({ authUser, onLogout }) {
   const planner = usePlannerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -117,6 +117,8 @@ function App() {
             goToNextWeek={planner.goToNextWeek}
             activeWeekDate={planner.activeWeekDate}
             onOpenSettings={() => setSettingsOpen(true)}
+            authUser={authUser}
+            onLogout={onLogout}
           />
 
           <WeekBoard

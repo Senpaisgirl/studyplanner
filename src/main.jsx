@@ -7,7 +7,7 @@ import AuthGate from './components/AuthGate'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthGate>
-      <App />
+      {({ user, logout }) => <App authUser={user} onLogout={logout} />}
     </AuthGate>
   </React.StrictMode>
 )

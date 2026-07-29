@@ -225,20 +225,21 @@ input, select {
   margin: 0;
   padding: 0.8rem 0.95rem;
   border-radius: var(--radius-md);
-  font-size: var(--text-sm);
   border: 1px solid transparent;
+  font-size: var(--text-sm);
 }
 
 .auth-message.success {
-  background: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+  background: color-mix(in srgb, var(--color-success) 14%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-success) 28%, var(--color-border));
   color: var(--color-text);
-  border-color: color-mix(in srgb, var(--color-success) 32%, var(--color-border));
 }
 
 .auth-message.error {
-  background: color-mix(in srgb, var(--color-danger) 14%, var(--color-surface));
-  color: var(--color-text);
-  border-color: color-mix(in srgb, var(--color-danger) 30%, var(--color-border));
+  background: color-mix(in srgb, var(--color-danger) 12%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-danger) 26%, var(--color-border));
+  color: var(--color-danger);
+  font-weight: 600;
 }
 
 .auth-form button[type="submit"] {

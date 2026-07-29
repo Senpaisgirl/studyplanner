@@ -226,15 +226,5 @@ export default function AuthGate({ children }) {
     );
   }
 
-  return (
-    <>
-      <div className="auth-topbar">
-        <span>{user.email}</span>
-        <button type="button" onClick={handleLogout}>
-          Sign out
-        </button>
-      </div>
-      {children}
-    </>
-  );
+  return children({ user, logout: handleLogout });
 }
