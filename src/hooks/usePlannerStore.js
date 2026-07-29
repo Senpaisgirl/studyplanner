@@ -48,7 +48,7 @@ export function usePlannerStore() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    plannerRepository.save({
+    plannerRepository.sync({
       ...data,
       userSettings: {
         ...(data.userSettings ?? {}),
@@ -86,7 +86,12 @@ export function usePlannerStore() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    plannerRepository.save(data);
+
+    const timeoutId = setTimeout(() => {
+      plannerRepository.sync(data);
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
   }, [data, isHydrated]);
 
   return {
