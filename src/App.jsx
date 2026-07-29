@@ -28,6 +28,7 @@ function App({ authUser, onLogout }) {
   const planner = usePlannerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [activeTaskId, setActiveTaskId] = useState(null);
+  const [activeTaskWidth, setActiveTaskWidth] = useState(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -75,15 +76,18 @@ function App({ authUser, onLogout }) {
 
   function handleDragStart(event) {
     setActiveTaskId(event.active.id);
+    setActiveTaskWidth(event.active.rect.current.initial?.width ?? null);
   }
 
   function handleDragCancel() {
     setActiveTaskId(null);
+    setActiveTaskWidth(null);
   }
 
   function handleDragEnd(event) {
     const { active, over } = event;
     setActiveTaskId(null);
+    setActiveTaskWidth(null);
 
     if (!over) return;
 
@@ -193,7 +197,7 @@ function App({ authUser, onLogout }) {
 
       <DragOverlay>
         {activeTask ? (
-          <div style={{ width: 320, pointerEvents: "none" }}>
+          <div style={{ width: activeTaskWidth ?? "auto", pointerEvents: "none" }}>
             <TaskCard
               task={activeTask}
               onDone={
