@@ -39,3 +39,15 @@ export function getReadableTextColor(hex) {
   const luminance = 0.2126 * srgb(r) + 0.7152 * srgb(g) + 0.0722 * srgb(b);
   return luminance > 0.5 ? "#111111" : "#ffffff";
 }
+
+export function getCategoryCardColors(baseColor) {
+  const softBg = mixHex(baseColor, "#fbfbf8", 0.9);
+  const borderColor = mixHex(baseColor, "#d4d1ca", 0.45);
+  const textColor = getReadableTextColor(softBg);
+
+  return {
+    softBg,
+    borderColor,
+    textColor,
+  };
+}

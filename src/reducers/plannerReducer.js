@@ -8,15 +8,13 @@ export const plannerActionTypes = {
   TOGGLE_TASK_DONE: "TOGGLE_TASK_DONE",
   MOVE_TASK_TO_WEEK: "MOVE_TASK_TO_WEEK",
   MOVE_TASK_TO_BACKLOG: "MOVE_TASK_TO_BACKLOG",
-  GO_TO_PREVIOUS_WEEK: "GO_TO_PREVIOUS_WEEK",
-  GO_TO_CURRENT_WEEK: "GO_TO_CURRENT_WEEK",
-  GO_TO_NEXT_WEEK: "GO_TO_NEXT_WEEK",
   ADD_DAILY_TASK: "ADD_DAILY_TASK",
   TOGGLE_DAILY_TASK_DONE: "TOGGLE_DAILY_TASK_DONE",
   REMOVE_DAILY_TASK: "REMOVE_DAILY_TASK",
   REMOVE_TASK: "REMOVE_TASK",
   MOVE_TASK_BY_DND: "MOVE_TASK_BY_DND",
   UPDATE_USER_SETTINGS: "UPDATE_USER_SETTINGS",
+  REORDER_DAILY_TASKS: "REORDER_DAILY_TASKS",
 };
 
 function updatePlannerState(state, patch) {
@@ -180,6 +178,24 @@ export function plannerReducer(state, action) {
           ...action.payload,
         },
       });
+
+    case plannerActionTypes.REORDER_DAILY_TASKS: {
+      const { taskId, targetIndex } = action.payload;
+      const currentDailyTasks = [...(state.dailyTasks ?? [])];
+      const currentIndex = currentDailyTasks.findIndex((task) => task.id === taskId);
+
+      if (currentIndex === -1) return state;
+
+      const [movedTask] = currentDailyTasks.splice(currentIndex, 1);
+      currentDailyTasks.splice(targetIndex, 0, movedTask);
+
+      return updatePlannerState(state, {
+        dailyTasks: currentDailyTasks.map((task, index) => ({
+          ...task,
+          order: index,
+        })),
+      });
+    }
 
     default:
       return state;

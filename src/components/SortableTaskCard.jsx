@@ -10,18 +10,34 @@ export default function SortableTaskCard({
   onDelete,
   compact = false,
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging, } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: task.id,
     data: {
       type: "task",
       task,
-      containerId: task.bucket === "backlog" ? "backlog" : "week",
+      containerId:
+        task.bucket === "daily"
+          ? "daily"
+          : task.bucket === "backlog"
+          ? "backlog"
+          : "week",
     },
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    opacity: isDragging ? 0.35 : 1,
+    zIndex: isDragging ? 999 : "auto",
+    position: "relative",
+    touchAction: "none",
   };
 
   return (
@@ -29,17 +45,17 @@ export default function SortableTaskCard({
       ref={setNodeRef}
       style={style}
       className={`sortable-task-card ${isDragging ? "is-dragging" : ""}`}
+      {...attributes}
+      {...listeners}
     >
-      <div {...attributes} {...listeners}>
-        <TaskCard
-          task={task}
-          onDone={onDone}
-          onBacklog={onBacklog}
-          onMoveToWeek={onMoveToWeek}
-          onDelete={onDelete}
-          compact={compact}
-        />
-      </div>
+      <TaskCard
+        task={task}
+        onDone={onDone}
+        onBacklog={onBacklog}
+        onMoveToWeek={onMoveToWeek}
+        onDelete={onDelete}
+        compact={compact}
+      />
     </div>
   );
 }

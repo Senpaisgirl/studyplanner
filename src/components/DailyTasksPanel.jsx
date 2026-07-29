@@ -1,9 +1,12 @@
-import TaskCard from "./TaskCard";
+import DroppableTaskList from "./DroppableTaskList";
+import SortableTaskCard from "./SortableTaskCard";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 
 export default function DailyTasksPanel({
   dailyTasks,
   toggleDailyTaskDone,
   removeDailyTask,
+  reorderDailyTasks,
 }) {
   const doneDailyCount = dailyTasks.filter((t) => t.status === "done").length;
 
@@ -14,23 +17,32 @@ export default function DailyTasksPanel({
         <strong>{doneDailyCount}/{dailyTasks.length}</strong>
       </div>
 
-      <div className="task-list compact">
-        {dailyTasks.length === 0 ? (
-          <p className="empty-copy">No daily tasks yet.</p>
-        ) : (
-          dailyTasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onDone={toggleDailyTaskDone}
-              onDelete={removeDailyTask}
-              compact
-              hideWeekAction
-              hideBacklogAction
-            />
-          ))
-        )}
-      </div>
+      <DroppableTaskList
+        id="daily"
+        className="task-list compact droppable-task-list"
+        isEmpty={dailyTasks.length === 0}
+      >
+        <SortableContext
+          items={dailyTasks.map((task) => task.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {dailyTasks.length === 0 ? (
+            <p className="empty-copy">No daily tasks yet.</p>
+          ) : (
+            dailyTasks.map((task) => (
+              <SortableTaskCard
+                key={task.id}
+                task={{ ...task, bucket: "daily" }}
+                onDone={toggleDailyTaskDone}
+                onDelete={removeDailyTask}
+                compact
+                hideWeekAction
+                hideBacklogAction
+              />
+            ))
+          )}
+        </SortableContext>
+      </DroppableTaskList>
     </section>
   );
 }

@@ -25,6 +25,7 @@ export default function Sidebar({
   toggleDailyTaskDone,
   removeDailyTask,
   removeTask,
+  reorderDailyTasks,
   taskCategories,
   eventCategories,
 }) {
@@ -109,6 +110,7 @@ export default function Sidebar({
                     setDailyTaskForm={setDailyTaskForm}
                     addDailyTask={addDailyTask}
                     taskCategories={taskCategories}
+                    reorderDailyTasks={reorderDailyTasks}
                 />
             )}
 

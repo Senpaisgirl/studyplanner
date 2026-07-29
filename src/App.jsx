@@ -7,6 +7,7 @@ import SettingsModal from "./components/SettingsModal";
 
 import {
   DndContext,
+  DragOverlay,
   PointerSensor,
   KeyboardSensor,
   useSensor,
@@ -43,12 +44,24 @@ function App({ authUser, onLogout }) {
     if (id === "week" || id === "backlog") return id;
     if (planner.weekTasks.some((task) => task.id === id)) return "week";
     if (planner.backlog.some((task) => task.id === id)) return "backlog";
+    if (planner.dailyTasks.some((task) => task.id === id)) return "daily";
     return null;
   }
 
   function getIndexInContainer(taskId, containerId) {
-    const items = containerId === "week" ? planner.weekTasks : planner.backlog;
-    return items.findIndex((task) => task.id === taskId);
+    if (containerId === "week") {
+      return planner.weekTasks.findIndex((task) => task.id === taskId);
+    }
+
+    if (containerId === "backlog") {
+      return planner.backlog.findIndex((task) => task.id === taskId);
+    }
+
+    if (containerId === "daily") {
+      return planner.dailyTasks.findIndex((task) => task.id === taskId);
+    }
+
+    return -1;
   }
 
   function handleDragEnd(event) {
@@ -62,6 +75,21 @@ function App({ authUser, onLogout }) {
     const toContainer = getContainerId(overId);
 
     if (!fromContainer || !toContainer) return;
+
+    if (fromContainer === "daily" || toContainer === "daily") {
+      if (fromContainer !== "daily" || toContainer !== "daily") return;
+
+      if (overId === "daily") {
+        planner.reorderDailyTasks(activeId, planner.dailyTasks.length);
+        return;
+      }
+
+      const targetIndex = getIndexInContainer(overId, "daily");
+      if (targetIndex === -1) return;
+
+      planner.reorderDailyTasks(activeId, targetIndex);
+      return;
+    }
 
     if (overId === "week" || overId === "backlog") {
       const targetItems = toContainer === "week" ? planner.weekTasks : planner.backlog;
@@ -104,6 +132,7 @@ function App({ authUser, onLogout }) {
           removeTask={planner.removeTask}
           taskCategories={planner.taskCategories}
           eventCategories={planner.eventCategories}
+          reorderDailyTasks={planner.reorderDailyTasks}
         />
 
         <main className="main">

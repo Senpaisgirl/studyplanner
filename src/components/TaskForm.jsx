@@ -46,13 +46,20 @@ export default function TaskForm({
         )}
 
         <select
-          value={taskForm.subject}
-          onChange={(e) =>
-            setTaskForm({ ...taskForm, subject: e.target.value })
-          }
+          value={taskForm.categoryId}
+          onChange={(e) => {
+            const selectedCategory = taskCategories.find(
+              (category) => category.id === e.target.value
+            );
+            setTaskForm({
+              ...taskForm,
+              categoryId: e.target.value,
+              subject: selectedCategory?.label ?? "",
+            });
+          }}
         >
           {taskCategories.map((category) => (
-            <option key={category.id} value={category.label}>
+            <option key={category.id} value={category.id}>
               {category.label}
             </option>
           ))}

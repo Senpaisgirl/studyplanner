@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePlannerData } from "../hooks/usePlannerData";
 import { defaultEventCategories, defaultTaskCategories } from "../data/defaultCategories";
 import { updateUserSettingsAction } from "../reducers/plannerActions";
+import { mixHex, getReadableTextColor, getCategoryCardColors } from "../utils/color";
 import {
   CloseIcon,
   PlusIcon,
@@ -68,6 +69,8 @@ export default function SettingsModal({ onClose, updateUserSettings, userSetting
   }
 
   function renderCategoryRow(cat) {
+    const { softBg: chipBg, borderColor: chipBorder, textColor: chipText } = getCategoryCardColors(cat.baseColor);
+
     return (
       <div className="settings-row" key={cat.id}>
         <div className="settings-row-main">
@@ -86,8 +89,9 @@ export default function SettingsModal({ onClose, updateUserSettings, userSetting
           <span
             className="settings-chip-preview"
             style={{
-              backgroundColor: `color-mix(in srgb, ${cat.baseColor} 18%, var(--color-surface))`,
-              borderColor: `color-mix(in srgb, ${cat.baseColor} 42%, var(--color-border))`,
+              backgroundColor: chipBg,
+              borderColor: chipBorder,
+              color: chipText,
             }}
           >
             {cat.label.trim() || "Preview"}

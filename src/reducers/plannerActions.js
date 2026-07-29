@@ -30,18 +30,6 @@ export const moveTaskToBacklogAction = (id) => ({
   payload: { id },
 });
 
-export const goToPreviousWeekAction = () => ({
-  type: plannerActionTypes.GO_TO_PREVIOUS_WEEK,
-});
-
-export const goToCurrentWeekAction = () => ({
-  type: plannerActionTypes.GO_TO_CURRENT_WEEK,
-});
-
-export const goToNextWeekAction = () => ({
-  type: plannerActionTypes.GO_TO_NEXT_WEEK,
-});
-
 export const addDailyTaskAction = (task) => ({
   type: plannerActionTypes.ADD_DAILY_TASK,
   payload: task,
@@ -75,4 +63,9 @@ export const moveTaskByDnDAction = (taskId, toContainer, targetIndex, weekKey) =
 export const updateUserSettingsAction = (settings) => ({
   type: plannerActionTypes.UPDATE_USER_SETTINGS,
   payload: settings,
+});
+
+export const reorderDailyTasksAction = (taskId, targetIndex) => ({
+  type: plannerActionTypes.REORDER_DAILY_TASKS,
+  payload: { taskId, targetIndex },
 });

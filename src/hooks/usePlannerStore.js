@@ -9,18 +9,19 @@ export function usePlannerStore() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [weekOffset, setWeekOffset] = useState(0);
 
-  const taskFormDefaultSubject = defaultTaskCategories[0]?.label ?? "";
-  const eventFormDefaultCategory = defaultEventCategories[0]?.label ?? "";
+  const taskFormDefaultSubject = defaultTaskCategories[0];
+  const eventFormDefaultCategory = defaultEventCategories[0];
 
   const [taskForm, setTaskForm] = useState({
     title: "",
-    subject: taskFormDefaultSubject,
+    categoryId: taskFormDefaultSubject.id ?? "other",
+    subject: taskFormDefaultSubject.label ?? "Other",
     due: "",
   });
 
   const [eventForm, setEventForm] = useState({
     title: "",
-    categoryId: eventFormDefaultCategory,
+    categoryId: eventFormDefaultCategory.id ?? "other",
     date: "",
     startTime: "10:00",
     endTime: "11:00",
@@ -99,6 +100,7 @@ export function usePlannerStore() {
     dispatch,
     isHydrated,
     weekOffset,
+    setWeekOffset,
     taskForm,
     setTaskForm,
     eventForm,

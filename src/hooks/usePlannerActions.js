@@ -5,15 +5,13 @@ import {
   toggleTaskDoneAction,
   moveTaskToWeekAction,
   moveTaskToBacklogAction,
-  goToPreviousWeekAction,
-  goToCurrentWeekAction,
-  goToNextWeekAction,
   addDailyTaskAction,
   removeDailyTaskAction,
   toggleDailyTaskDoneAction,
   removeTaskAction,
   moveTaskByDnDAction,
   updateUserSettingsAction,
+  reorderDailyTasksAction,
 } from "../reducers/plannerActions";
 
 export function usePlannerActions({
@@ -25,6 +23,7 @@ export function usePlannerActions({
   activeWeekKey,
   dailyTaskForm,
   setDailyTaskForm,
+  setWeekOffset,
 }) {
   function moveTaskToWeek(taskId) {
     dispatch(moveTaskToWeekAction(taskId, activeWeekKey));
@@ -46,6 +45,7 @@ export function usePlannerActions({
       addTaskAction({
         id: crypto.randomUUID(),
         title: taskForm.title.trim(),
+        categoryId: taskForm.categoryId ?? taskForm.category ?? "other",
         subject: taskForm.subject,
         status: "planned",
         bucket: "backlog",
@@ -57,6 +57,8 @@ export function usePlannerActions({
     setTaskForm((prev) => ({
       ...prev,
       title: "",
+      categoryId: prev.categoryId,
+      subject: prev.subject,
       due: "",
     }));
   }
@@ -79,6 +81,7 @@ export function usePlannerActions({
 
     setEventForm((prev) => ({
       ...prev,
+      categoryId: prev.categoryId,
       title: "",
       date: "",
     }));
@@ -116,15 +119,15 @@ export function usePlannerActions({
   }
 
   function goToPreviousWeek() {
-    dispatch(goToPreviousWeekAction());
+    setWeekOffset((prev) => prev - 1);
   }
 
   function goToCurrentWeek() {
-    dispatch(goToCurrentWeekAction());
+    setWeekOffset(0);
   }
 
   function goToNextWeek() {
-    dispatch(goToNextWeekAction());
+    setWeekOffset((prev) => prev + 1);
   }
 
   function removeTask(taskId) {
@@ -146,6 +149,10 @@ export function usePlannerActions({
     dispatch(updateUserSettingsAction(settings));
   }
 
+  function reorderDailyTasks(taskId, targetIndex) {
+    dispatch(reorderDailyTasksAction(taskId, targetIndex));
+  }
+
   return {
     moveTaskToWeek,
     sendTaskToBacklog,
@@ -162,5 +169,6 @@ export function usePlannerActions({
     removeTask,
     moveTaskByDnD,
     updateUserSettings,
+    reorderDailyTasks,
   };
 }
