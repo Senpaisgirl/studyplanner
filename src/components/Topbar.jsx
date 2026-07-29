@@ -67,24 +67,30 @@ export default function Topbar ({
                 </div>
             </div>
 
-            <div className="topbar-right stats">
-                <Stat label="Planned" value={plannedWeekTasksCount} />
-                <Stat label="Done" value={doneWeekTasksCount} />
-                <Stat label="Events" value={weekEventsCount} />
+            <div className="topbar-right">
+                <div className="topbar-right stats">
+                    <Stat label="Planned" value={plannedWeekTasksCount} />
+                    <Stat label="Done" value={doneWeekTasksCount} />
+                    <Stat label="Events" value={weekEventsCount} />
+                </div>
 
-                {authUser && (
-                    <div className="topbar-account">
-                    <span className="topbar-account-email">{authUser.email}</span>
-                    <button
-                        type="button"
-                        className="ghost-btn"
-                        onClick={onLogout}
-                        aria-label="Logout"
-                        title="Logout"
-                    >
-                        <LogoutIcon />
-                    </button>
-                    </div>
+                <div className="topbar-right set-log">
+                    {authUser && (
+                        <>
+                        <div className="topbar-account">
+                            <span className="topbar-account-email">{authUser.email}</span>
+                            
+                        </div>
+                        <button
+                            type="button"
+                            className="week-nav-btn icon-only"
+                            onClick={onLogout}
+                            aria-label="Logout"
+                            title="Logout"
+                        >
+                            <LogoutIcon />
+                        </button>
+                        </>
                 )}
 
                 <button
@@ -96,6 +102,7 @@ export default function Topbar ({
                 >
                     <SettingsIcon />
                 </button>
+                </div>
             </div>
             {settingsOpen && (
                 <SettingsModal onClose={() => setSettingsOpen(false)} />

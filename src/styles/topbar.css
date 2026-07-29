@@ -38,15 +38,22 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-end;
+  gap: var(--space-2);
   flex: 0 0 auto;
 }
 
 .topbar .stats {
   display: grid;
-  grid-template-columns: repeat(4, 72px);
+  grid-template-columns: repeat(3, 72px);
   gap: var(--space-2);
   width: auto;
-  margin-right: -1.4rem;
+}
+
+.topbar .set-log {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--space-2);
+  width: auto;
 }
 
 .eyebrow { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin: 0 0 0.25rem; }
@@ -103,6 +110,7 @@
   padding: 0;
 }
 
+
 .week-nav-btn svg {
   width: 1rem;
   height: 1rem;
@@ -120,12 +128,10 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
+  max-width: 420px;
 }
 
 .topbar-account-email {
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--color-text-muted);
   font-size: var(--text-sm);
