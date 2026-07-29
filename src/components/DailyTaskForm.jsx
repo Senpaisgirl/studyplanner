@@ -4,7 +4,7 @@ export default function DailyTaskForm({
   dailyTaskForm,
   setDailyTaskForm,
   addDailyTask,
-  taskCategory,
+  taskCategories,
 }) {
     const [titleError, setTitleError] = useState("");
 
