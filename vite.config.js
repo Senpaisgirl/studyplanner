@@ -5,5 +5,5 @@ const isGitHubPages = process.env.DEPLOY_TARGET === "github-pages";
 
 export default defineConfig({
   plugins: [react()],
-  base: isGithubPages ? "/studyplanner/" : "/",
+  base: isGitHubPages ? "/studyplanner/" : "/",
 })
