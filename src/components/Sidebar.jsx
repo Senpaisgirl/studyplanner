@@ -108,6 +108,7 @@ export default function Sidebar({
                     dailyTaskForm={dailyTaskForm}
                     setDailyTaskForm={setDailyTaskForm}
                     addDailyTask={addDailyTask}
+                    taskCategory={taskCategories}
                 />
             )}
 

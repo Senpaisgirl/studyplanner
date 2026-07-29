@@ -4,6 +4,7 @@ export default function DailyTaskForm({
   dailyTaskForm,
   setDailyTaskForm,
   addDailyTask,
+  taskCategory,
 }) {
     const [titleError, setTitleError] = useState("");
 
@@ -49,11 +50,11 @@ export default function DailyTaskForm({
             setDailyTaskForm({ ...dailyTaskForm, subject: e.target.value })
           }
         >
-          <option value="NuMa">Numerische Mathematik</option>
-          <option value="DS">Digitale Spiele</option>
-          <option value="SE2">Softwaretechnik 2</option>
-          <option value="MMT">Medizinische Messtechnik</option>
-          <option value="Sonstiges">Other</option>
+          {taskCategories.map((category) => (
+            <option key={category.id} value={category.label}>
+              {category.label}
+            </option>
+          ))}
         </select>
 
         <button type="submit">Save</button>
