@@ -32,16 +32,37 @@ export function usePlannerStore() {
     subject: "Sonstiges",
   });
 
-  const [theme, setTheme] = useState(() =>
-    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
-  );
+  const [theme, setTheme] = useState(() => {
+    try {
+      const raw = localStorage.getItem("studyplanner-app-v1");
+      const parsed = raw ? JSON.parse(raw) : null;
+      const savedTheme = parsed?.userSettings?.theme;
+
+      const initialTheme =
+        savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+      document.documentElement.setAttribute("data-theme", initialTheme);
+      return initialTheme;
+    } catch {
+      const fallbackTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+      document.documentElement.setAttribute("data-theme", fallbackTheme);
+      return fallbackTheme;
+    }
+  });
 
   useEffect(() => {
     const savedTheme = data.userSettings?.theme;
-    if (savedTheme === "light" || savedTheme === "dark") {
+    if ((savedTheme === "light" || savedTheme === "dark") && savedTheme !== theme) {
       setTheme(savedTheme);
     }
-  }, [data.userSettings?.theme]);
+  }, [data.userSettings?.theme, theme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
