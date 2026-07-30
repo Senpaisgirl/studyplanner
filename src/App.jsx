@@ -53,9 +53,15 @@ function App({ authUser, onLogout }) {
   }, [activeTaskId, planner.weekTasks, planner.backlog, planner.dailyTasks]);
 
   function getContainerId(id) {
-    if (id === "week" || id === "backlog" || id === "daily") return id;
+    if (id === "week" || id === "week-done" || id === "backlog" || id === "daily") {
+      return id;
+    }
 
-    if (planner.weekTasks.some((task) => task.id === id)) return "week";
+    if (planner.weekTasks.some((task) => task.id === id)) {
+      const task = planner.weekTasks.find((item) => item.id === id);
+      return task?.status === "done" ? "week-done" : "week";
+    }
+
     if (planner.backlog.some((task) => task.id === id)) return "backlog";
     if (planner.dailyTasks.some((task) => task.id === id)) return "daily";
 
@@ -63,9 +69,17 @@ function App({ authUser, onLogout }) {
   }
 
   function getItemsByContainer(containerId) {
-    if (containerId === "week") return planner.weekTasks;
+    if (containerId === "week") {
+      return planner.weekTasks.filter((task) => task.status !== "done");
+    }
+
+    if (containerId === "week-done") {
+      return planner.weekTasks.filter((task) => task.status === "done");
+    }
+
     if (containerId === "backlog") return planner.backlog;
     if (containerId === "daily") return planner.dailyTasks;
+
     return [];
   }
 
@@ -99,7 +113,12 @@ function App({ authUser, onLogout }) {
 
     if (!fromContainer || !toContainer) return;
 
-    if (overId === "week" || overId === "backlog" || overId === "daily") {
+    if (
+      overId === "week" ||
+      overId === "week-done" ||
+      overId === "backlog" ||
+      overId === "daily"
+    ) {
       const targetItems = getItemsByContainer(toContainer);
 
       if (toContainer === "daily") {

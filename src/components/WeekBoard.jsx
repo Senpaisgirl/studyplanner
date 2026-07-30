@@ -26,7 +26,8 @@ export default function WeekBoard({
   setWeekOffset,
   allEvents,
 }) {
-  const doneWeekTasksCount = weekTasks.filter((task) => task.status === "done").length;
+  const plannedWeekTasks = weekTasks.filter((task) => task.status !== "done");
+  const doneWeekTasks = weekTasks.filter((task) => task.status === "done");
 
   return (
     <section className="board-grid">
@@ -35,23 +36,57 @@ export default function WeekBoard({
           <div className="panel-head">
             <h2>This Week</h2>
             <strong>
-              {doneWeekTasksCount}/{weekTasks.length}
+              {plannedWeekTasks.length}/{weekTasks.length}
             </strong>
           </div>
 
           <DroppableTaskList
             id="week"
             className="task-list droppable-task-list"
-            isEmpty={weekTasks.length === 0}
+            isEmpty={plannedWeekTasks.length === 0}
           >
             <SortableContext
-              items={weekTasks.map((task) => task.id)}
+              items={plannedWeekTasks.map((task) => task.id)}
               strategy={rectSortingStrategy}
             >
-              {weekTasks.length === 0 ? (
+              {plannedWeekTasks.length === 0 ? (
                 <p className="empty-copy">No tasks planned this week yet.</p>
               ) : (
-                weekTasks.map((task) => (
+                plannedWeekTasks.map((task) => (
+                  <SortableTaskCard
+                    key={task.id}
+                    task={task}
+                    taskCategories={taskCategories}
+                    onDone={toggleDone}
+                    onBacklog={sendTaskToBacklog}
+                    onMoveToWeek={moveTaskToWeek}
+                    onDelete={removeTask}
+                  />
+                ))
+              )}
+            </SortableContext>
+          </DroppableTaskList>
+        </section>
+
+        <section className="panel">
+          <div className="panel-head">
+            <h2>Done</h2>
+            <strong>{doneWeekTasks.length}</strong>
+          </div>
+
+          <DroppableTaskList
+            id="week-done"
+            className="task-list droppable-task-list"
+            isEmpty={doneWeekTasks.length === 0}
+          >
+            <SortableContext
+              items={doneWeekTasks.map((task) => task.id)}
+              strategy={rectSortingStrategy}
+            >
+              {doneWeekTasks.length === 0 ? (
+                <p className="empty-copy">No finished tasks in this week yet.</p>
+              ) : (
+                doneWeekTasks.map((task) => (
                   <SortableTaskCard
                     key={task.id}
                     task={task}

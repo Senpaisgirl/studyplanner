@@ -13,6 +13,7 @@ export default function SortableTaskCard({
   hideWeekAction = false,
   hideBacklogAction = false,
   hideDeleteAction = false,
+  donePanel = false,
 }) {
   const {
     attributes,
@@ -31,6 +32,8 @@ export default function SortableTaskCard({
           ? "daily"
           : task.bucket === "backlog"
           ? "backlog"
+          : task.status === "done"
+          ? "week-done"
           : "week",
     },
   });
@@ -63,6 +66,7 @@ export default function SortableTaskCard({
         hideWeekAction={hideWeekAction}
         hideBacklogAction={hideBacklogAction}
         hideDeleteAction={hideDeleteAction}
+        donePanel={donePanel}
       />
     </div>
   );

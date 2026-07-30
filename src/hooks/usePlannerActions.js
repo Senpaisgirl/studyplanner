@@ -142,7 +142,7 @@ export function usePlannerActions({
         taskId,
         toContainer,
         targetIndex,
-        toContainer === "week" ? activeWeekKey : null,
+        toContainer === "week" || toContainer === "week-done" ? activeWeekKey : null,
       ),
     );
   }

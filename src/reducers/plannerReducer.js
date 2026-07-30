@@ -129,45 +129,71 @@ export function plannerReducer(state, action) {
       });
 
     case plannerActionTypes.MOVE_TASK_BY_DND: {
-      const { taskId, toContainer, targetIndex, weekKey } = action.payload;
+    const { taskId, toContainer, targetIndex, weekKey } = action.payload;
 
-      const currentTasks = [...state.tasks];
-      const movedTask = currentTasks.find((task) => task.id === taskId);
+    const currentTasks = [...state.tasks];
+    const movedTask = currentTasks.find((task) => task.id === taskId);
 
-      if (!movedTask) return state;
+    if (!movedTask) return state;
 
-      const remainingTasks = currentTasks.filter((task) => task.id !== taskId);
+    const remainingTasks = currentTasks.filter((task) => task.id !== taskId);
 
-      const updatedMovedTask = {
-        ...movedTask,
-        bucket: toContainer,
-        weekKey: toContainer === "week" ? weekKey : null,
-      };
+    const resolvedBucket =
+      toContainer === "week-done" ? "week" : toContainer;
 
-      const targetTasks = remainingTasks.filter((task) =>
-        toContainer === "week"
-          ? task.bucket === "week" && task.weekKey === weekKey
-          : task.bucket === "backlog"
-      );
+    const resolvedStatus =
+      toContainer === "week-done"
+        ? "done"
+        : toContainer === "week"
+        ? "planned"
+        : movedTask.status;
 
-      const otherTasks = remainingTasks.filter((task) =>
-        toContainer === "week"
-          ? !(task.bucket === "week" && task.weekKey === weekKey)
-          : task.bucket !== "backlog"
-      );
+    const updatedMovedTask = {
+      ...movedTask,
+      bucket: resolvedBucket,
+      weekKey: resolvedBucket === "week" ? weekKey : null,
+      status: resolvedStatus,
+    };
 
-      const nextTargetTasks = [...targetTasks];
-      nextTargetTasks.splice(targetIndex, 0, updatedMovedTask);
+    const isTargetTaskInContainer = (task) => {
+      if (toContainer === "week") {
+        return (
+          task.bucket === "week" &&
+          task.weekKey === weekKey &&
+          task.status !== "done"
+        );
+      }
 
-      const reorderedTargetTasks = nextTargetTasks.map((task, index) => ({
-        ...task,
-        order: index,
-      }));
+      if (toContainer === "week-done") {
+        return (
+          task.bucket === "week" &&
+          task.weekKey === weekKey &&
+          task.status === "done"
+        );
+      }
 
-      return updatePlannerState(state, {
-        tasks: [...otherTasks, ...reorderedTargetTasks],
-      });
-    }
+      if (toContainer === "backlog") {
+        return task.bucket === "backlog";
+      }
+
+      return false;
+    };
+
+    const targetTasks = remainingTasks.filter(isTargetTaskInContainer);
+    const otherTasks = remainingTasks.filter((task) => !isTargetTaskInContainer(task));
+
+    const nextTargetTasks = [...targetTasks];
+    nextTargetTasks.splice(targetIndex, 0, updatedMovedTask);
+
+    const reorderedTargetTasks = nextTargetTasks.map((task, index) => ({
+      ...task,
+      order: index,
+    }));
+
+    return updatePlannerState(state, {
+      tasks: [...otherTasks, ...reorderedTargetTasks],
+    });
+  }
 
     case plannerActionTypes.MOVE_DAILY_TASK_BY_DND: {
     const { taskId, targetIndex } = action.payload;

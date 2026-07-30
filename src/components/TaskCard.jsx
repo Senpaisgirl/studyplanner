@@ -14,6 +14,7 @@ export default function TaskCard({
   hideWeekAction = false,
   hideBacklogAction = false,
   hideDeleteAction = false,
+  donePanel = false,
 }) {
   const fallbackTaskCategory = defaultTaskCategories[0];
 
@@ -28,6 +29,7 @@ export default function TaskCard({
 
   const dueState = getDueState(task.due);
   const isUrgent = dueState === "overdue";
+  const showReopenButton = donePanel || task.status === "done";
 
   return (
     <article
@@ -43,10 +45,10 @@ export default function TaskCard({
           <button
             type="button"
             onClick={() => onDone(task.id)}
-            aria-label={task.status === "done" ? "Re-open" : "Done"}
-            title={task.status === "done" ? "Re-open" : "Done"}
+            aria-label={showReopenButton ? "Reopen task" : "Done"}
+            title={showReopenButton ? "Reopen task" : "Done"}
           >
-            {task.status === "done" ? <UndoIcon /> : <CheckIcon />}
+            {showReopenButton ? <UndoIcon /> : <CheckIcon />}
           </button>
 
           {!hideWeekAction &&
