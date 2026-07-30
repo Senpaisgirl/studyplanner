@@ -80,7 +80,6 @@ export function plannerReducer(state, action) {
                 ...task,
                 bucket: "week",
                 weekKey: action.payload.weekKey,
-                status: "planned",
               }
             : task,
         ),
@@ -94,7 +93,6 @@ export function plannerReducer(state, action) {
                 ...task,
                 bucket: "backlog",
                 weekKey: null,
-                status: "planned",
               }
             : task,
         ),
@@ -144,7 +142,6 @@ export function plannerReducer(state, action) {
         ...movedTask,
         bucket: toContainer,
         weekKey: toContainer === "week" ? weekKey : null,
-        status: "planned",
       };
 
       const targetTasks = remainingTasks.filter((task) =>
