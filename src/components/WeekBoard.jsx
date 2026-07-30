@@ -71,7 +71,7 @@ export default function WeekBoard({
         <section className="panel">
           <div className="panel-head">
             <h2>Done</h2>
-            <strong>{doneWeekTasks.length}</strong>
+            <strong>{doneWeekTasks.length}/{weekTasks.length}</strong>
           </div>
 
           <DroppableTaskList
