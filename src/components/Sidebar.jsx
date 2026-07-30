@@ -116,12 +116,14 @@ export default function Sidebar({
 
             <DailyTasksPanel
                 dailyTasks={dailyTasks}
+                taskCategories={taskCategories}
                 toggleDailyTaskDone={toggleDailyTaskDone}
                 removeDailyTask={removeDailyTask}
             />
 
             <BacklogPanel
                 backlog={backlog}
+                taskCategories={taskCategories}
                 toggleDone={toggleDone}
                 sendTaskToBacklog={sendTaskToBacklog}
                 moveTaskToWeek={moveTaskToWeek}

@@ -4,18 +4,21 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 
 export default function BacklogPanel({
   backlog,
+  taskCategories = [],
   toggleDone,
   sendTaskToBacklog,
   moveTaskToWeek,
   removeTask,
 }) {
-   const doneBacklogCount = backlog.filter((task) => task.status === "done").length;
+  const doneBacklogCount = backlog.filter((task) => task.status === "done").length;
 
   return (
     <section className="panel backlog-panel">
       <div className="panel-head">
         <h2>Backlog</h2>
-        <strong>{doneBacklogCount}/{backlog.length}</strong>
+        <strong>
+          {doneBacklogCount}/{backlog.length}
+        </strong>
       </div>
 
       <DroppableTaskList
@@ -34,6 +37,7 @@ export default function BacklogPanel({
               <SortableTaskCard
                 key={task.id}
                 task={task}
+                taskCategories={taskCategories}
                 onDone={toggleDone}
                 onBacklog={sendTaskToBacklog}
                 onMoveToWeek={moveTaskToWeek}

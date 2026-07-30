@@ -1,10 +1,11 @@
-import { formatDueDate, getDueState } from '../utils/date'
-import { mixHex, getReadableTextColor, getCategoryCardColors } from "../utils/color";
-import { usePlannerData } from "../hooks/usePlannerData";
-import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon, CloseIcon } from './Icons';
+import { formatDueDate, getDueState } from "../utils/date";
+import { getCategoryCardColors } from "../utils/color";
+import { UndoIcon, CheckIcon, WeekIcon, BacklogIcon, CloseIcon } from "./Icons";
+import { defaultTaskCategories } from "../data/defaultCategories";
 
 export default function TaskCard({
   task,
+  taskCategories = [],
   onDone,
   onBacklog,
   onMoveToWeek,
@@ -14,37 +15,42 @@ export default function TaskCard({
   hideBacklogAction = false,
   hideDeleteAction = false,
 }) {
-  const planner = usePlannerData();
-  const categories = planner.taskCategories ?? [];
-  const category = categories.find((item) => item.id === task.categoryId) ?? categories.find((item) => item.label === task.subject);
-  const categoryLabel = category?.label ?? task.subject ?? "Other";
+  const fallbackTaskCategory = defaultTaskCategories[0];
 
-  const baseColor = category?.baseColor ?? "white";
+  const category =
+    taskCategories.find((item) => item.id === task.categoryId) ??
+    taskCategories.find((item) => item.label === task.subject) ??
+    fallbackTaskCategory;
+
+  const categoryLabel = category?.label ?? task.subject ?? "Other";
+  const baseColor = category?.baseColor ?? fallbackTaskCategory.baseColor;
   const { softBg, borderColor, textColor } = getCategoryCardColors(baseColor);
 
   const dueState = getDueState(task.due);
   const isUrgent = dueState === "overdue";
-  
+
   return (
-    <article className={`task-card ${task.status === "done" ? "is-done" : ""} ${
-      compact ? "compact" : "" } ${dueState ? `due-${dueState}` : ""}`}
+    <article
+      className={`task-card ${task.status === "done" ? "is-done" : ""} ${
+        compact ? "compact" : ""
+      } ${dueState ? `due-${dueState}` : ""}`}
       style={{ background: softBg, borderColor, color: textColor }}
     >
-
       <div className="task-top">
         <span className="task-subject">{categoryLabel}</span>
+
         <div className="task-actions task-actions-top">
           <button
             type="button"
             onClick={() => onDone(task.id)}
-            aria-label={task.status === 'done' ? 'Re-open' : 'Done'}
-            title={task.status === 'done' ? 'Re-open' : 'Done'}
+            aria-label={task.status === "done" ? "Re-open" : "Done"}
+            title={task.status === "done" ? "Re-open" : "Done"}
           >
-            {task.status === 'done' ? <UndoIcon /> : <CheckIcon />}
+            {task.status === "done" ? <UndoIcon /> : <CheckIcon />}
           </button>
 
-          {!hideWeekAction && (
-            task.bucket === 'backlog' ? (
+          {!hideWeekAction &&
+            (task.bucket === "backlog" ? (
               <button
                 type="button"
                 onClick={() => onMoveToWeek(task.id)}
@@ -62,8 +68,7 @@ export default function TaskCard({
               >
                 <BacklogIcon />
               </button>
-            )
-          )}
+            ))}
 
           {!hideDeleteAction && (
             <button
@@ -79,15 +84,19 @@ export default function TaskCard({
       </div>
 
       <h3 className="task-title">
-        <span className='task-title-text'>{task.title}</span>
+        <span className="task-title-text">{task.title}</span>
       </h3>
 
-       {task.due && (
-          <p className={`task-due ${dueState === 'soon' ? 'task-due-soon' : ''}`}>
-            {isUrgent && <span aria-hidden="true" className="task-alert">❗ </span>}
-            Due: {formatDueDate(task.due)}
-          </p>
-       )}
+      {task.due && (
+        <p className={`task-due ${dueState === "soon" ? "task-due-soon" : ""}`}>
+          {isUrgent && (
+            <span aria-hidden="true" className="task-alert">
+              ❗{" "}
+            </span>
+          )}
+          Due: {formatDueDate(task.due)}
+        </p>
+      )}
     </article>
-  )
+  );
 }

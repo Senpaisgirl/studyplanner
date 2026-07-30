@@ -4,9 +4,9 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 
 export default function DailyTasksPanel({
   dailyTasks,
+  taskCategories = [],
   toggleDailyTaskDone,
   removeDailyTask,
-  reorderDailyTasks,
 }) {
   const doneDailyCount = dailyTasks.filter((t) => t.status === "done").length;
 
@@ -14,7 +14,9 @@ export default function DailyTasksPanel({
     <section className="panel backlog-panel">
       <div className="panel-head">
         <h2>Daily Tasks</h2>
-        <strong>{doneDailyCount}/{dailyTasks.length}</strong>
+        <strong>
+          {doneDailyCount}/{dailyTasks.length}
+        </strong>
       </div>
 
       <DroppableTaskList
@@ -33,6 +35,7 @@ export default function DailyTasksPanel({
               <SortableTaskCard
                 key={task.id}
                 task={{ ...task, bucket: "daily" }}
+                taskCategories={taskCategories}
                 onDone={toggleDailyTaskDone}
                 onDelete={removeDailyTask}
                 compact

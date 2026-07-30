@@ -5,6 +5,7 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 export default function WeekBoard({
   weekTasks,
+  taskCategories = [],
   toggleDone,
   sendTaskToBacklog,
   moveTaskToWeek,
@@ -33,7 +34,9 @@ export default function WeekBoard({
         <section className="panel">
           <div className="panel-head">
             <h2>This Week</h2>
-            <strong>{doneWeekTasksCount}/{weekTasks.length}</strong>
+            <strong>
+              {doneWeekTasksCount}/{weekTasks.length}
+            </strong>
           </div>
 
           <DroppableTaskList
@@ -52,6 +55,7 @@ export default function WeekBoard({
                   <SortableTaskCard
                     key={task.id}
                     task={task}
+                    taskCategories={taskCategories}
                     onDone={toggleDone}
                     onBacklog={sendTaskToBacklog}
                     onMoveToWeek={moveTaskToWeek}

@@ -177,6 +177,7 @@ function App({ authUser, onLogout }) {
 
           <WeekBoard
             weekTasks={planner.weekTasks}
+            taskCategories={planner.taskCategories}
             toggleDone={planner.toggleDone}
             sendTaskToBacklog={planner.sendTaskToBacklog}
             moveTaskToWeek={planner.moveTaskToWeek}
@@ -205,6 +206,7 @@ function App({ authUser, onLogout }) {
           <div style={{ width: activeTaskWidth ?? "auto", pointerEvents: "none" }}>
             <TaskCard
               task={activeTask}
+              taskCategories={planner.taskCategories}
               onDone={
                 activeTask.bucket === "daily"
                   ? planner.toggleDailyTaskDone

@@ -4,6 +4,7 @@ import TaskCard from "./TaskCard";
 
 export default function SortableTaskCard({
   task,
+  taskCategories = [],
   onDone,
   onBacklog,
   onMoveToWeek,
@@ -53,6 +54,7 @@ export default function SortableTaskCard({
     >
       <TaskCard
         task={task}
+        taskCategories={taskCategories}
         onDone={onDone}
         onBacklog={onBacklog}
         onMoveToWeek={onMoveToWeek}
