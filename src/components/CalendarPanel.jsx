@@ -1,4 +1,10 @@
-import { toDateKey, formatSelectedDate } from "../utils/date";
+import { useEffect, useMemo, useState } from "react";
+import {
+  toDateKey,
+  formatSelectedDate,
+  formatDueDate,
+  parseLocalDate,
+} from "../utils/date";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -9,6 +15,10 @@ import { mixHex, getReadableTextColor } from "../utils/color";
 import { defaultEventCategories } from "../data/defaultCategories";
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+function formatEventRangeLabel(start, end) {
+  return `${formatDueDate(toDateKey(start))} - ${formatDueDate(toDateKey(end))}`;
+}
 
 export default function CalendarPanel({
   calendarMonthLabel,
@@ -21,7 +31,23 @@ export default function CalendarPanel({
   setCalendarDate,
   setSelectedDate,
   removeEvent,
+  allEvents = [],
+  weekRange,
+  activeWeekDate,
+  setWeekOffset,
 }) {
+  const [rangeStart, setRangeStart] = useState(
+    weekRange?.start ? toDateKey(weekRange.start) : toDateKey(new Date())
+  );
+  const [rangeEnd, setRangeEnd] = useState(
+    weekRange?.end ? toDateKey(weekRange.end) : toDateKey(new Date())
+  );
+
+  useEffect(() => {
+    if (!weekRange?.start || !weekRange?.end) return;
+    setRangeStart(toDateKey(weekRange.start));
+    setRangeEnd(toDateKey(weekRange.end));
+  }, [activeWeekDate, weekRange]);
 
   function goToPreviousMonth() {
     setCalendarDate(
@@ -39,6 +65,96 @@ export default function CalendarPanel({
     const today = new Date();
     setCalendarDate(today);
     setSelectedDate(today);
+  }
+
+  function resetRangeToCurrentWeek() {
+    if (typeof setWeekOffset === "function") {
+      setWeekOffset(0);
+    }
+
+    if (weekRange?.start && weekRange?.end) {
+      setRangeStart(toDateKey(weekRange.start));
+      setRangeEnd(toDateKey(weekRange.end));
+    }
+  }
+
+  const normalizedRange = useMemo(() => {
+    if (!rangeStart || !rangeEnd) return null;
+
+    const start = parseLocalDate(rangeStart);
+    const end = parseLocalDate(rangeEnd);
+
+    if (start > end) {
+      return { start: end, end: start };
+    }
+
+    return { start, end };
+  }, [rangeStart, rangeEnd]);
+
+  const rangeEvents = useMemo(() => {
+    if (!normalizedRange) return [];
+
+    return allEvents
+      .filter((event) => {
+        const eventDate = parseLocalDate(event.date);
+        return eventDate >= normalizedRange.start && eventDate <= normalizedRange.end;
+      })
+      .sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return (a.startTime ?? "").localeCompare(b.startTime ?? "");
+      });
+  }, [allEvents, normalizedRange]);
+
+  function renderEventCard(event, showDate = false) {
+    const category =
+      eventCategories.find((item) => item.id === event.categoryId) ||
+      defaultEventCategories.find((item) => item.id === event.categoryId);
+
+    const categoryLabel = category?.label ?? "Other";
+    const baseColor = category?.baseColor ?? "#ffeedb";
+    const cardBg = mixHex(baseColor, "#fbfbf8", 0.88);
+    const cardBorder = mixHex(baseColor, "#d4d1ca", 0.45);
+    const cardText = getReadableTextColor(cardBg);
+
+    return (
+      <article
+        key={event.id}
+        className={`event-card ${event.categoryId ?? "other"}`}
+        role="group"
+        aria-label={event.title}
+        style={{
+          background: cardBg,
+          borderColor: cardBorder,
+          color: cardText,
+        }}
+      >
+        <div className="event-card-top">
+          <strong>{event.title}</strong>
+
+          <button
+            type="button"
+            onClick={() => removeEvent(event.id)}
+            aria-label="Delete Event"
+            title="Delete Event"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        <p>
+          {showDate ? `${formatDueDate(event.date)} · ` : ""}
+          {event.startTime} - {event.endTime} · {categoryLabel}
+        </p>
+      </article>
+    );
+  }
+
+  function getMonthLabel(dateString) {
+    const date = parseLocalDate(dateString);
+    return date.toLocaleDateString("en-GB", {
+      month: "long",
+      year: "numeric",
+    });
   }
 
   return (
@@ -136,45 +252,103 @@ export default function CalendarPanel({
           <p className="empty-copy">No events on this day.</p>
         ) : (
           <div className="event-list">
-            {selectedDateEvents.map((event) => {
-              const category = eventCategories.find((item) => item.id === event.categoryId) ||
-                defaultEventCategories.find((item) => item.id === event.categoryId);
-              const categoryLabel = category?.label ?? "Other";
+            {selectedDateEvents.map((event) => renderEventCard(event))}
+          </div>
+        )}
+      </div>
 
+      <div className="calendar-range-section" aria-live="polite">
+        <div className="calendar-event-timeline">
+          <h3>Event Timeline</h3>
+          <span>{rangeEvents.length}</span>
+        </div>
+
+        <div className="calendar-range-controls">
+          <label className="calendar-range-field">
+            <span>Start</span>
+            <input
+              type="date"
+              value={rangeStart}
+              onChange={(e) => setRangeStart(e.target.value)}
+            />
+          </label>
+
+          <label className="calendar-range-field">
+            <span>End</span>
+            <input
+              type="date"
+              value={rangeEnd}
+              onChange={(e) => setRangeEnd(e.target.value)}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="calendar-range-reset-btn"
+            onClick={resetRangeToCurrentWeek}
+          >
+            Current week
+          </button>
+        </div>
+
+        {rangeEvents.length === 0 ? (
+          <p className="empty-copy">No events in this range.</p>
+        ) : (
+          <div className="event-list">
+            {rangeEvents.map((event, index) => {
+              const currentMonth = getMonthLabel(event.date);
+              const previousMonth =
+                index > 0 ? getMonthLabel(rangeEvents[index - 1].date) : null;
+
+              const showMonthDivider = index === 0 || currentMonth !== previousMonth;
+
+              const category =
+                eventCategories.find((item) => item.id === event.categoryId) ||
+                defaultEventCategories.find((item) => item.id === event.categoryId);
+
+              const categoryLabel = category?.label ?? "Other";
               const baseColor = category?.baseColor ?? "#ffeedb";
               const cardBg = mixHex(baseColor, "#fbfbf8", 0.88);
               const cardBorder = mixHex(baseColor, "#d4d1ca", 0.45);
-              const cardText = getReadableTextColor(baseColor);
+              const cardText = getReadableTextColor(cardBg);
 
               return (
-                <article
-                  key={event.id}
-                  className={`event-card ${event.categoryId ?? "other"}`}
-                  role="group"
-                  aria-label={event.title}
-                  style={{
-                    background: cardBg,
-                    borderColor: cardBorder,
-                    color: cardText,
-                  }}
-                >
-                  <div className="event-card-top">
-                    <strong>{event.title}</strong>
+                <div key={event.id} className="event-list-group">
+                  {showMonthDivider && (
+                    <div className="event-month-divider">
+                      <span>{currentMonth}</span>
+                    </div>
+                  )}
 
-                    <button
-                      type="button"s
-                      onClick={() => removeEvent(event.id)}
-                      aria-label="Delete Event"
-                      title="Delete Event"
-                    >
-                      <CloseIcon />
-                    </button>
-                  </div>
+                  <article
+                    className={`event-card ${event.categoryId ?? "other"}`}
+                    role="group"
+                    aria-label={event.title}
+                    style={{
+                      background: cardBg,
+                      borderColor: cardBorder,
+                      color: cardText,
+                    }}
+                  >
+                    <div className="event-card-top">
+                      <strong>{event.title}</strong>
 
-                  <p>
-                    {event.startTime} - {event.endTime} {categoryLabel}
-                  </p>
-                </article>
+                      <button
+                        type="button"
+                        onClick={() => removeEvent(event.id)}
+                        aria-label="Delete Event"
+                        title="Delete Event"
+                      >
+                        <CloseIcon />
+                      </button>
+                    </div>
+
+                    <p>
+                      {formatDueDate(event.date)} · {event.startTime} - {event.endTime} ·{" "}
+                      {categoryLabel}
+                    </p>
+                  </article>
+                </div>
               );
             })}
           </div>

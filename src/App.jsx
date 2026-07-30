@@ -191,6 +191,11 @@ function App({ authUser, onLogout }) {
             setSelectedDate={planner.setSelectedDate}
             removeEvent={planner.removeEvent}
             removeTask={planner.removeTask}
+            weekEvents={planner.weekEvents}
+            weekRange={planner.weekRange}
+            activeWeekDate={planner.activeWeekDate}
+            setWeekOffset={planner.setWeekOffset}
+            allEvents={planner.allEvents}
           />
         </main>
       </div>

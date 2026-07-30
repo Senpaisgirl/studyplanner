@@ -89,6 +89,8 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
     activeWeekDate,
     activeWeekKey,
     weekLabel,
+    weekRange,
+    weekEvents,
     calendarMonthLabel,
     calendarDays,
     selectedDateKey,
@@ -103,5 +105,6 @@ export function usePlannerSelectors({ data, weekOffset, calendarDate, selectedDa
     doneDailyTasksCount,
     taskCategories,
     eventCategories,
+    allEvents: data.events ?? [],
   };
 }

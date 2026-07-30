@@ -19,6 +19,11 @@ export default function WeekBoard({
   setSelectedDate,
   removeEvent,
   removeTask,
+  weekEvents,
+  weekRange,
+  activeWeekDate,
+  setWeekOffset,
+  allEvents,
 }) {
   const doneWeekTasksCount = weekTasks.filter((task) => task.status === "done").length;
 
@@ -70,6 +75,11 @@ export default function WeekBoard({
         setCalendarDate={setCalendarDate}
         setSelectedDate={setSelectedDate}
         removeEvent={removeEvent}
+        weekEvents={weekEvents}
+        weekRange={weekRange}
+        activeWeekDate={activeWeekDate}
+        setWeekOffset={setWeekOffset}
+        allEvents={allEvents}
       />
     </section>
   );
