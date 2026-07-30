@@ -94,6 +94,26 @@ export default function AuthGate({ children }) {
     setUser(null);
   }
 
+  async function handleGoogleLogin() {
+    setSubmitting(true);
+    setMessage("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      setMessage(error.message ?? "Google login failed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   if (loading) {
     return <div className="auth-loading">Loading...</div>;
   }
@@ -193,14 +213,19 @@ export default function AuthGate({ children }) {
                   {message}
                 </p>
               )}
-
-              <button type="submit" disabled={submitting}>
-                {submitting
-                  ? "Please wait..."
-                  : isSignup
-                  ? "Create account"
-                  : "Sign in"}
-              </button>
+              <div className="submit-btns-row">
+                <button type="submit" disabled={submitting}>
+                  {submitting
+                    ? "Please wait..."
+                    : isSignup
+                    ? "Create account"
+                    : "Sign in"}
+                </button>
+                <button type="button" onClick={handleGoogleLogin} disabled={submitting}>
+                  Continue with Google
+                </button>
+              </div>
+              
             </form>
 
             <div className="auth-footer">
