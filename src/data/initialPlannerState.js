@@ -4,6 +4,7 @@ export const initialPlannerState = {
   events: [],
   updatedAt: null,
   dailyTasksResetAt: null,
+  weeklyCleanupWeekKey: null,
   userSettings: {
     theme: null,
     categories: [],
