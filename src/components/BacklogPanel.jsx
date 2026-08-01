@@ -17,7 +17,7 @@ export default function BacklogPanel({
       <div className="panel-head">
         <h2>Backlog</h2>
         <strong>
-          {doneBacklogCount}/{backlog.length}
+          {/*{doneBacklogCount}/*/}{backlog.length}
         </strong>
       </div>
 
