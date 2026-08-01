@@ -119,6 +119,7 @@ export default function Sidebar({
                 taskCategories={taskCategories}
                 toggleDailyTaskDone={toggleDailyTaskDone}
                 removeDailyTask={removeDailyTask}
+                collapsed={sidebarMode === "task" || sidebarMode === "event"}
             />
 
             <BacklogPanel
@@ -128,6 +129,7 @@ export default function Sidebar({
                 sendTaskToBacklog={sendTaskToBacklog}
                 moveTaskToWeek={moveTaskToWeek}
                 removeTask={removeTask}
+                collapsed={sidebarMode === "daily" || sidebarMode === "event"}
             />
         </aside>
     );

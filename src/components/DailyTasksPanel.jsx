@@ -7,11 +7,12 @@ export default function DailyTasksPanel({
   taskCategories = [],
   toggleDailyTaskDone,
   removeDailyTask,
+  collapsed = false,
 }) {
   const doneDailyCount = dailyTasks.filter((t) => t.status === "done").length;
 
   return (
-    <section className="panel backlog-panel">
+    <section className={`panel daily-tasks-panel ${collapsed ? "is-collapsed" : ""}`}>
       <div className="panel-head">
         <h2>Daily Tasks</h2>
         <strong>
@@ -19,33 +20,35 @@ export default function DailyTasksPanel({
         </strong>
       </div>
 
-      <DroppableTaskList
-        id="daily"
-        className="task-list compact droppable-task-list"
-        isEmpty={dailyTasks.length === 0}
-      >
-        <SortableContext
-          items={dailyTasks.map((task) => task.id)}
-          strategy={verticalListSortingStrategy}
+      {!collapsed && (
+        <DroppableTaskList
+          id="daily"
+          className="task-list compact droppable-task-list"
+          isEmpty={dailyTasks.length === 0}
         >
-          {dailyTasks.length === 0 ? (
-            <p className="empty-copy">No daily tasks yet.</p>
-          ) : (
-            dailyTasks.map((task) => (
-              <SortableTaskCard
-                key={task.id}
-                task={{ ...task, bucket: "daily" }}
-                taskCategories={taskCategories}
-                onDone={toggleDailyTaskDone}
-                onDelete={removeDailyTask}
-                compact
-                hideWeekAction
-                hideBacklogAction
-              />
-            ))
-          )}
-        </SortableContext>
-      </DroppableTaskList>
+          <SortableContext
+            items={dailyTasks.map((task) => task.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {dailyTasks.length === 0 ? (
+              <p className="empty-copy">No daily tasks yet.</p>
+            ) : (
+              dailyTasks.map((task) => (
+                <SortableTaskCard
+                  key={task.id}
+                  task={{ ...task, bucket: "daily" }}
+                  taskCategories={taskCategories}
+                  onDone={toggleDailyTaskDone}
+                  onDelete={removeDailyTask}
+                  compact
+                  hideWeekAction
+                  hideBacklogAction
+                />
+              ))
+            )}
+          </SortableContext>
+        </DroppableTaskList>
+      )}
     </section>
   );
 }

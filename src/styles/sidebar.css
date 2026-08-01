@@ -1,8 +1,23 @@
 .sidebar {
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
   padding: var(--space-6);
   border-right: 1px solid var(--color-border);
   background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+}
+
+.sidebar > * {
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.mode-switch,
+.panel,
+.daily-tasks-panel,
+.backlog-panel {
+  min-height: 0;
 }
 
 .brand {
@@ -67,4 +82,45 @@
 }
 .mode-btn.active svg {
   color: currentColor;
+}
+
+.daily-tasks-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+}
+
+.daily-tasks-panel .droppable-task-list {
+  flex: 0 0 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.backlog-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.backlog-panel .droppable-task-list {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.daily-tasks-panel.is-collapsed,
+.backlog-panel.is-collapsed {
+  flex: 0 0 auto;
+}
+
+.daily-tasks-panel.is-collapsed .panel-head,
+.backlog-panel.is-collapsed .panel-head {
+  margin-bottom: 0;
+}
+
+.daily-tasks-panel.is-collapsed,
+.backlog-panel.is-collapsed {
+  padding-bottom: 1rem;
 }
