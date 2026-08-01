@@ -35,7 +35,7 @@ export function usePlannerActions({
   }
 
   function toggleDone(taskId) {
-    dispatch(toggleTaskDoneAction(taskId));
+    dispatch(toggleTaskDoneAction(taskId, activeWeekKey));
   }
 
   function addTask(e) {

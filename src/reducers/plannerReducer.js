@@ -102,9 +102,16 @@ export function plannerReducer(state, action) {
       if (!existingTask) return state;
 
       const nextStatus = existingTask.status === "done" ? "planned" : "done";
+      const moveBacklogTaskIntoWeek =
+        existingTask.bucket === "backlog" && nextStatus === "done";
+
       const updatedTask = {
         ...existingTask,
         status: nextStatus,
+        bucket: moveBacklogTaskIntoWeek ? "week" : existingTask.bucket,
+        weekKey: moveBacklogTaskIntoWeek
+          ? action.payload.weekKey ?? existingTask.weekKey ?? null
+          : existingTask.weekKey ?? null,
       };
 
       const targetContainer =
@@ -201,7 +208,7 @@ export function plannerReducer(state, action) {
       const resolvedStatus =
         toContainer === "week-done"
           ? "done"
-          : toContainer === "week"
+          : toContainer === "week" || toContainer === "backlog"
           ? "planned"
           : movedTask.status;
 

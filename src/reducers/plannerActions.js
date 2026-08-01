@@ -15,9 +15,9 @@ export const removeEventAction = (id) => ({
   payload: { id },
 });
 
-export const toggleTaskDoneAction = (id) => ({
+export const toggleTaskDoneAction = (id, weekKey = null) => ({
   type: plannerActionTypes.TOGGLE_TASK_DONE,
-  payload: { id },
+  payload: { id, weekKey },
 });
 
 export const moveTaskToWeekAction = (id, weekKey) => ({
