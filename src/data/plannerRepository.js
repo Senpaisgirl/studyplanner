@@ -1,4 +1,4 @@
-import initialPlannerState from "./initialPlannerState";
+import { initialPlannerState } from "./initialPlannerState";
 import { pullRemotePlannerState, pushRemotePlannerState } from "../api/remotePlannerApi";
 
 // Hilfsfunktionen aus localPlannerStorage – hier inline, damit plannerRepository
@@ -149,8 +149,8 @@ function normalizePlannerState(value) {
   const dailyTasks = resetNeeded
     ? []
     : Array.isArray(value?.dailyTasks)
-    ? value.dailyTasks
-    : [];
+      ? value.dailyTasks
+      : [];
 
   return {
     ...initialPlannerState,
