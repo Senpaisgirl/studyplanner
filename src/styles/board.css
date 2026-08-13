@@ -20,6 +20,14 @@
   gap: var(--space-3);
 }
 
+.task-list.compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
 .board-main .task-list {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
