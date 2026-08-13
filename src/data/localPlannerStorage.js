@@ -82,8 +82,9 @@ function cleanupPastWeekItems(value) {
       if (!task.weekKey) return true;
 
       const isPastWeek = compareWeekKeys(task.weekKey, currentWeekKey) < 0;
-
       if (!isPastWeek) return true;
+
+      // Fertige Aufgaben aus vergangenen Wochen werden entfernt
       if (task.status === "done") return false;
 
       return true;
@@ -94,6 +95,8 @@ function cleanupPastWeekItems(value) {
 
       const isPastWeek = compareWeekKeys(task.weekKey, currentWeekKey) < 0;
       if (!isPastWeek) return task;
+
+      // Nicht fertige Aufgaben aus vergangenen Wochen zurück in den Backlog
       if (task.status === "done") return task;
 
       return {

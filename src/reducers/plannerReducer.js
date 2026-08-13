@@ -221,11 +221,19 @@ export function plannerReducer(state, action) {
 
       const isTargetTaskInContainer = (task) => {
         if (toContainer === "week") {
-          return task.bucket === "week" && task.weekKey === weekKey && task.status !== "done";
+          return (
+            task.bucket === "week" &&
+            task.weekKey === weekKey &&
+            task.status !== "done"
+          );
         }
 
         if (toContainer === "week-done") {
-          return task.bucket === "week" && task.weekKey === weekKey && task.status === "done";
+          return (
+            task.bucket === "week" &&
+            task.weekKey === weekKey &&
+            task.status === "done"
+          );
         }
 
         if (toContainer === "backlog") {
@@ -236,7 +244,9 @@ export function plannerReducer(state, action) {
       };
 
       const targetTasks = remainingTasks.filter(isTargetTaskInContainer);
-      const otherTasks = remainingTasks.filter((task) => !isTargetTaskInContainer(task));
+      const otherTasks = remainingTasks.filter(
+        (task) => !isTargetTaskInContainer(task)
+      );
 
       const nextTargetTasks = [...targetTasks];
       nextTargetTasks.splice(targetIndex, 0, updatedMovedTask);
