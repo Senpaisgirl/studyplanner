@@ -160,7 +160,6 @@
 
 .droppable-task-list {
   min-height: 80px;
-  border-radius: var(--radius-lg);
   transition:
     background var(--transition-interactive),
     box-shadow var(--transition-interactive),
