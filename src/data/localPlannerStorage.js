@@ -123,6 +123,13 @@ function cleanupPastWeekItems(value) {
   };
 }
 
+function resetDailyTasks(tasks) {
+  return (Array.isArray(tasks) ? tasks : []).map((task) => ({
+    ...task,
+    status: "planned",
+  }));
+}
+
 function normalizePlannerState(value) {
   const resetAt = value?.dailyTasksResetAt ?? null;
   const resetNeeded = shouldResetDailyTasks(value);
@@ -134,7 +141,7 @@ function normalizePlannerState(value) {
     tasks: weeklyCleanup.tasks,
     events: weeklyCleanup.events,
     dailyTasks: resetNeeded
-      ? []
+      ? resetDailyTasks(value?.dailyTasks)
       : Array.isArray(value?.dailyTasks)
       ? value.dailyTasks
       : [],

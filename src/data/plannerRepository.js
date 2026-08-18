@@ -138,7 +138,12 @@ function cleanupPastWeekItems(value) {
   };
 }
 
-// WICHTIG: normalizePlannerState mit Daily-Reset-Logik (4 Uhr)
+function resetDailyTasks(tasks) {
+  return (Array.isArray(tasks) ? tasks : []).map((task) => ({
+    ...task,
+    status: "planned",
+  }));
+}
 
 function normalizePlannerState(value) {
   const weeklyCleanup = cleanupPastWeekItems(value);
@@ -147,10 +152,10 @@ function normalizePlannerState(value) {
   const resetNeeded = shouldResetDailyTasks(value);
 
   const dailyTasks = resetNeeded
-    ? []
+    ? resetDailyTasks(value?.dailyTasks)
     : Array.isArray(value?.dailyTasks)
-      ? value.dailyTasks
-      : [];
+    ? value.dailyTasks
+    : [];
 
   return {
     ...initialPlannerState,
